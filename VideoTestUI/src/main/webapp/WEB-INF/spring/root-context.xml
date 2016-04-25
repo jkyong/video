@@ -20,23 +20,30 @@
 	<!-- Use @Controller annotations for MVC controller definitions -->
  	<!-- <mvc:annotation-driven /> -->
 	<tx:annotation-driven />
-
-	<bean id="dataSource"
-		class="org.springframework.jdbc.datasource.DriverManagerDataSource">
-		<property name="driverClassName" value="org.h2.Driver" />
-		<property name="url" value="jdbc:h2:tcp://localhost/~/test" />
-		<property name="username" value="sa" />
-		<property name="password" value="" />
-	</bean>
-	
-	<bean id="entityManagerFactory"
-		class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
-		<property name="dataSource" ref="dataSource" />
-		<property name="persistenceUnitName" value="VideoTestUI" />
-	</bean>
 	
 	<bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
-		<property name="entityManagerFactory" ref="entityManagerFactory" />
+		<property name="entityManagerFactory" ref="entityManagerFactory"/>
 	</bean>
+		
+	<bean id="dataSource" class="org.springframework.jdbc.datasource.SimpleDriverDataSource">
+		<property name="driverClass" value="org.mariadb.jdbc.Driver"></property>
+		<property name="url" value="jdbc:mariadb://112.160.65.103:3306/video"></property>
+		<property name="username" value="root"></property>
+		<property name="password" value="1234"></property>
+	</bean>
+
+	<bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean" >		
+		<property name="persistenceUnitName" value="VideoTestUI"/>
+		<property name="dataSource" ref="dataSource"/>
+		
+		<property name="jpaVendorAdapter">
+			<bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter" >
+				<property name="showSql" value="true"/>
+				<property name="generateDdl" value="true"/>	
+				<property name="databasePlatform" value="org.hibernate.dialect.MySQLDialect"/>
+			</bean>
+		</property>
+	</bean>
+	
 	
 </beans>
