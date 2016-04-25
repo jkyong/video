@@ -324,10 +324,7 @@ public class FileManagerController {
 	@RequestMapping(value = "downloadOnlyOneFolder/{folderId}", method = RequestMethod.GET)
 	public @ResponseBody void downloadOnlyOneFolder(@PathVariable long folderId) {
 		
-		Structure s = structure.find(folderId);
-		/*DownloadObj downObj = new DownloadObj();
-		downObj.dd(folderId);*/
-		System.out.println(s.getChildren());
+		
 		
 	}
 	
