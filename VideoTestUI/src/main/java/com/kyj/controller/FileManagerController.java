@@ -24,7 +24,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.kyj.data.DownloadObj;
 import com.kyj.data.UploadObj;
 import com.kyj.domain.FileInfo;
 import com.kyj.domain.Structure;
@@ -276,7 +275,7 @@ public class FileManagerController {
 	}
 	
 	@RequestMapping(value = "downloadOnlyOneFile/{fileId}", method = RequestMethod.GET)
-	public @ResponseBody void dd(@PathVariable("fileId") long fileId, HttpServletResponse response) throws IOException {
+	public @ResponseBody void downloadOnlyOneFile(@PathVariable("fileId") long fileId, HttpServletResponse response) throws IOException {
 		FileInfo fi = fileInfo.find(fileId);
 		HashMap<String, Object> map = new HashMap<>();
 		
@@ -321,11 +320,132 @@ public class FileManagerController {
 		
 	}
 	
-	@RequestMapping(value = "downloadOnlyOneFolder/{folderId}", method = RequestMethod.GET)
-	public @ResponseBody void downloadOnlyOneFolder(@PathVariable long folderId) {
+	@RequestMapping(value = "downloadOnlyOneFolder", method = RequestMethod.GET)
+	public @ResponseBody void downloadOnlyOneFolder(@RequestParam long folderId) {
+		List<Structure> structureAll = structure.findAll();
+		List<FileInfo> fileInfoAll = fileInfo.findAll();
 		
+		Structure struc = structure.find(folderId);
 		
+		List<Structure> children = structure.findChildren(folderId);
+		
+		List<String> dataFolder = new ArrayList<>();
+		long upperId = folderId;
+		System.out.println(upperId);
+		for( int i = 0; i < structureAll.size(); i++) {
+			long subId = structureAll.get(i).getPid();
+			
+			if ( subId == upperId ) {
+				long id = structureAll.get(i).getKey(); 
+				String appendPath = structureAll.get(i).getTitle();
+				
+			/*	for ( int k =0; k < fileInfoAll.size(); k++) {
+					if ( fileInfoAll.get(k).getStructure_id() == id) {
+						dataFolder.add(structureAll.get(i).getTitle() + "/" + fileInfoAll.get(k).getName() + "." + fileInfoAll.get(k).getExtension());
+					}
+				}*/
+	//			dataFolder.add(structureAll.get(i).getTitle());
+				re(structureAll, fileInfoAll, dataFolder, id, appendPath);
+			}
+			
+		}
+		
+		for ( int j = 0; j < dataFolder.size(); j++)
+			System.out.println(dataFolder.get(j));
+	}
+		
+	public void re(List<Structure> structureAll, List<FileInfo> fileInfoAll, List<String> dataFolder, long subId, String appendPath) {
+		for ( int i = 0; i < structureAll.size(); i++) {
+			long structureAllPid = structureAll.get(i).getPid();
+			
+			if ( subId == structureAllPid) {
+				long id = structureAll.get(i).getKey();
+				
+				for ( int k =0; k < fileInfoAll.size(); k++) {
+					if ( fileInfoAll.get(k).getStructure_id() == subId) {
+						dataFolder.add(appendPath + "/" + fileInfoAll.get(k).getName() + "." + fileInfoAll.get(k).getExtension());						
+					}
+				}
+				appendPath = appendPath + "/" + structureAll.get(i).getTitle();
+				re(structureAll, fileInfoAll, dataFolder, id, appendPath);
+				
+				dataFolder.add(appendPath);
+				appendPath = "";
+			}
+			
+		/*	if ( i == structureAll.size() - 1) {
+				for ( int k = 0; k < fileInfoAll.size(); k++) {
+					if ( fileInfoAll.get(k).getStructure_id() == structureAllPid) {
+						dataFolder.add(fileInfoAll.get(k).getName());
+					}
+				}
+			}*/
+		}
+	}
+	
+	public void addFile(List<FileInfo> fileInfoAll) {
 		
 	}
 	
+	public void addItem(List<Structure> result, List<Structure> dataList, int index) {
+		for (int i = 0; i < result.size(); i++) {
+			try {
+				long resultId = result.get(i).getKey();
+
+				long dataListId = dataList.get(index).getKey();
+				String dataListTitle = dataList.get(index).getTitle();
+				long dataListPid = dataList.get(index).getPid();
+//				boolean dataListFolder = dataList.get(index).getFolder();
+
+				if (resultId == dataListPid) {
+					Structure data = new Structure();
+					data.setKey(dataListId);
+					data.setTitle(dataListTitle);
+					data.setPid(dataListPid);
+//					data.setFolder(dataListFolder);
+					data.setFolder(true);
+
+					result.get(i).getChildren().add(data);
+				} else {
+					if (result.get(i).getChildren().size() != 0)
+						addItem(result.get(i).getChildren(), dataList, index);
+					else {
+
+					}
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+
+	}
+
+	// Ʈ�� �߰� ����
+	public List<Structure> addRootTree(List<Structure> result, List<Structure> dataList, long folderId) {
+
+		for (int i = 0; i < dataList.size(); i++) {
+			long id = dataList.get(i).getKey();			
+			String title = dataList.get(i).getTitle();
+			long pid = dataList.get(i).getPid();
+			
+//			boolean folder = dataList.get(i).getFolder();
+			System.out.println(folderId);
+			// root
+			if (pid == folderId) {
+				Structure data = new Structure();
+				data.setKey(id);
+				data.setTitle(title);
+				data.setPid(pid);
+//				data.setFolder(folder);
+				data.setFolder(true);
+				result.add(data);
+			} else {
+//				for (int j = 0; j < result.size(); j++) {
+					addItem(result, dataList, i);
+//				}
+			}
+		}
+		return result;
+		
+	}
 }

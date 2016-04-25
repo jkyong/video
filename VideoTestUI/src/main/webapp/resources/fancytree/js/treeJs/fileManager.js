@@ -723,7 +723,19 @@ var fileManager = {
 		
 		// 폴더 하나
 		else if ( checkedItem.length == 1 && folderId.length == 1) {
-			location.href = "downloadOnlyOneFolder" + "/" + folderId[0];
+	//		location.href = "downloadOnlyOneFolder" + "/" + folderId[0];
+			console.log(folderId[0]);
+			$.ajax({
+				url : "downloadOnlyOneFolder",			
+				data : {
+					folderId : folderId[0]
+				},
+				success : function() {
+				},
+				error : function(a) {
+					alert(a.status);
+				},
+			});
 		}
 		
 		// 폴더, 파일 여러개
