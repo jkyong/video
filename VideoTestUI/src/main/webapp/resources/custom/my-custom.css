@@ -1,0 +1,703 @@
+.type_thumb {
+	position:absolute;
+	top:26px;
+	right:0;
+	bottom:0;
+	left:0;
+	overflow:auto;
+	overflow-x:hidden;
+	_overflow-y:auto;
+	_width:100%;
+	*zoom:1;
+	padding-bottom:20px;
+	cursor:default;
+}
+.type_thumb li {
+	display:inline;
+	float:left;
+/* 	width:117px; */
+	width:121px;
+	/* height:159px; */
+	height: 180px;
+	/* padding:14px 15px 16px 5px; */
+	padding:14px 5px 16px 5px;
+	vertical-align:top;
+}
+.type_thumb li .check {
+	width:auto;
+	height:13px;
+	margin-left:16px;
+	margin-top: 10px;
+	position: absolute;
+}
+.type_thumb li .check .i_u_adm {
+	margin-top:-5px;
+}
+.type_thumb li .check .bu_manager {
+	margin-top:-5px;
+}
+.type_thumb li .img_check {
+	display:inline-block;
+	overflow:hidden;
+	width:13px;
+	height:13px;
+	margin-right:2px;
+	background:url(https://ssl.pstatic.net/static/pwe/ndrive/2011/bul_inp_disabled.gif) no-repeat left top;
+	vertical-align:top;
+}
+.type_thumb li .check input {
+	margin-right:2px;
+	vertical-align:top;
+}
+.type_thumb li .thumb_box {
+	position:relative;
+	clear:both;
+	display:block;
+	overflow:hidden;
+	/* cursor:default!important; */
+	zoom:1;
+}
+.type_thumb li .thumb_box span {
+	display:block;
+/* 	overflow:hidden; */
+	height:14px;
+	padding-top:28px;
+	color:#fff;
+	font-size:9px;
+	font-family:verdana;
+	font-weight:bold;
+	text-align:center;
+}
+.type_thumb li .thumb_box .bu_folder_b span {
+	display:none;
+}
+.type_thumb li .thumb_box .reply_total {
+	visibility:visible;
+	top:-5px;
+	left:22px;
+}
+.type_thumb li .thumb_box .reply_total .reply_bg {
+	left:0;
+	right:auto;
+}
+.type_thumb li .thumb_box .reply_total .reply_bg em {
+	line-height:14px;
+}
+.type_thumb li .thumb_box .reply_total .arrow {
+	left:6px;
+	top:13px;
+	background-position:left -51px;
+}
+.type_thumb li .thumb_box .bu_new {
+	margin:1px 2px 2px 0;
+	_margin-bottom:0;
+	vertical-align:top;
+}
+.type_thumb li .thumb_box .vid {
+	display:block;
+	overflow:hidden;
+	position:absolute;
+	left:50%;
+	top:42px;
+	margin:0 0 0 -10px;
+	width:21px;
+	height:21px;
+	background:url(https://ssl.pstatic.net/static/pwe/ndrive/deskhome/spr_check_vid.png) no-repeat 0 0;
+}
+.type_thumb li .thumb_box table,.type_thumb li .thumb_box table th,.type_thumb li .thumb_box table td {
+	margin:0;
+	padding:0;
+	border:0 none;
+}
+.type_thumb li .thumb_box table {
+	width:89px;
+	height:89px;
+	margin:8px 0 9px 10px;
+}
+.type_thumb li .thumb_box table td {
+	width:87px;
+	height:87px;
+	border:1px solid #eee;
+	text-align:center;
+	vertical-align:middle;
+}
+.type_thumb li .thumb_box table td.dim img {
+	filter:alpha(opacity=50);
+	opacity:.5;
+}
+.type_thumb li .thumb_box.dim {
+	position:relative;
+}
+.type_thumb li .thumb_box.dim a,.type_thumb li .thumb_box.dim a:hover {
+	color:#999;
+}
+.type_thumb li .thumb_box .dim_sh {
+	display:none;
+	position:absolute;
+	left:16px;
+	top:14px;
+	width:19px;
+	height:19px;
+	background:url(https://ssl.pstatic.net/static/pwe/ndrive/deskhome/dim_bg.png) no-repeat 0 0;
+	z-index:1000;
+}
+.type_thumb li .thumb_box.dim .dim_sh {
+	display:block;
+}
+.type_thumb li .title {
+	width:107px;
+	height:41px;
+	color:#333;
+	line-height:14px;
+	font-weight:normal;
+	text-align:center;
+	word-break:break-all;
+	word-wrap:break-word;
+	overflow:hidden;
+}
+.type_thumb li .title .rate {
+	padding-top:1px;
+	color:#999;
+}
+.type_thumb li .title a {
+	display:block;
+	overflow:hidden;
+	height:28px;
+	color:#333;
+	cursor:default;
+}
+.type_thumb li .title a:hover {
+	color:#333;
+	text-decoration:none;
+}
+.type_thumb li.nosearch {
+	display:block;
+	float:none;
+	width:100%;
+	height:auto;
+	margin:19px 0 0;
+	font-weight:bold;
+	text-align:center;
+}
+.type_thumb .bu_ing_b span {
+	display:none!important;
+}
+.type_thumb li .thumb_box:hover,.type_thumb li.ovr .thumb_box {
+	background:url(https://ssl.pstatic.net/static/pwe/ndrive/deskhome/bg_thumb_box.png) no-repeat -175px 4px;
+}
+.type_thumb li .thumb_box:hover td,.type_thumb li .thumb_box:hover .thumb_view,.type_thumb li.ovr .thumb_box td {
+	border-color:#c3ced6;
+}
+.type_thumb li.focus .thumb_box {
+	background:url(https://ssl.pstatic.net/static/pwe/ndrive/deskhome/bg_thumb_box.png) no-repeat -280px 4px;
+}
+.type_thumb li.focus .thumb_box td {
+	border-color:#487fb5;
+}
+.type_thumb li.focus .thumb_box .thumb_view {
+	border-color:#487fb5;
+}
+.type_thumb li.selected .thumb_box {
+	background:url(https://ssl.pstatic.net/static/pwe/ndrive/deskhome/bg_thumb_box.png) no-repeat -280px 9px;
+}
+.type_thumb li.selected .thumb_box td {
+	border-color:#487fb5;
+}
+.type_thumb li.selected .thumb_box .thumb_view {
+	border-color:#487fb5;
+}
+.type_thumb .i_url_adm {
+	margin-top:-5px;
+}
+
+
+.bu,.i_u,.i_u_adm,.bu_manager,.i_url_adm {
+	display:inline-block;
+	position:relative;
+}
+.bu,.i_u,.i_u_adm,.bu_manager,.i_url_adm,#footer .ico_skin,.setting_layer_pay .ly_txt p .bu,.imp_ly2 a .bu,.tree li .root,.tree li .wbasket,.tree li button,.btn_more_se a,.none_search_list p.tx a.more,.type_thumnail .thumnail_area .fil_name span.name .new,.no_listing .nl_ico,.serch_tit_area .bt_add,.myvolumn .dsc .bu,.myvolumn .dsc .ico,.manage_dan .ico,.bu_c,.bu_c2,.bu_q,.bu_close_p,.bu_close_p2,.bu_warning,.bu_dot,.webview .xls_view_bot .sheet a.on,.webview .bu_p,.notice_me2day a,.share_url .button_g button .bu_delete,.share_folder .sa_a .arrow,.share_mem .sa_a_area .arrow,.button_add a .add_ico,.smem_list .amem_pd .spr_new,.smem_list .ud_btn span,.smem_list .asid .wk_m .ud_btn,.smem_list .asid .wk_s .ud_btn,.smem_list .share_ico,.smem_list td .bu_delete em,.smem_list td .bu_read,.smem_list td .bu_write,.sm_mes2 .ico_d,.share_dl .info a.strong:after,.pop_ft_layer:after,.ly_sort_works em {
+	background-image:url(https://ssl.pstatic.net/static/pwe/ndrive/deskhome/icon_20151012.png);
+	background-repeat:no-repeat;
+}
+
+.blind {
+	display:block;
+	overflow:hidden;
+	*position:absolute;
+	top:0;
+	left:0;
+	width:0;
+	height:0;
+	border:0;
+	background:none;
+	font-size:0;
+	line-height:0;
+}
+
+.blind,legend,hr {
+	visibility:hidden;
+	overflow:hidden;
+	position:absolute;
+	top:0;
+	left:0;
+	width:0;
+	height:0;
+	font-size:0;
+	line-height:0;
+}
+
+
+.bu_manager {
+	position:relative;
+	width:15px;
+	height:14px;
+	margin-right:3px;
+	background-position:-97px -21px;
+	vertical-align:middle;
+	cursor:pointer!important;
+}
+.bu_code {
+	display:inline-block;
+	position:relative;
+	top:-1px;
+	width:15px;
+	height:14px;
+	margin-right:3px;
+	background:url(https://ssl.pstatic.net/static/pwe/ndrive/deskhome/sp_code_icon.png) no-repeat 0 0;
+	vertical-align:middle;
+}
+.bu_doc_view {
+	width:30px;
+	height:34px;
+	background-position:-198px -207px;
+}
+.bu_ppt_view {
+	width:30px;
+	height:34px;
+	background-position:-231px -207px;
+}
+.bu_xls_view {
+	width:30px;
+	height:34px;
+	background-position:-264px -207px;
+}
+.bu_hwp_view {
+	width:30px;
+	height:34px;
+	background-position:-297px -207px;
+}
+.bu_dim {
+	opacity:.5;
+	filter:alpha(opacity=50);
+}
+.bu_root_b {
+	width:33px;
+	height:32px;
+	margin:-4px 0 0;
+	background-position:-201px -119px;
+}
+.bu_folder_b {
+	width:33px;
+	height:28px;
+	background-position:-239px -123px;
+}
+.bu_shared_b {
+	width:39px;
+	height:31px;
+	margin:0 0 -3px -6px;
+	background-position:left -737px;
+}
+.bu_sharing_b {
+	width:39px;
+	height:32px;
+	margin:0 0 -3px -6px;
+	background-position:-43px -737px;
+}
+.bu_sharing_b .thm_url {
+	left:11px;
+	bottom:0;
+}
+.bu_share_all_b {
+	width:41px;
+	height:31px;
+	margin:0 -1px -3px -6px;
+	background-position:-86px -737px;
+}
+.bu_url_b {
+	width:35px;
+	height:28px;
+	margin:0 -1px 0 0;
+	background-position:-135px -737px;
+}
+.bu_img_b {
+	width:35px;
+	height:44px;
+	background-position:-0 -246px;
+}
+.bu_doc_b {
+	width:35px;
+	height:44px;
+	background-position:-37px -246px;
+}
+.bu_docx_b {
+	width:35px;
+	height:44px;
+	background-position:-37px -246px;
+}
+.bu_ndoc_b {
+	width:35px;
+	height:44px;
+	padding:3px 0 0 8px;
+	margin-left:-8px;
+	background-position:-172px -657px;
+}
+.bu_ndoc_b .thm_url {
+	left:0;
+}
+.bu_ppt_b {
+	width:35px;
+	height:44px;
+	background-position:-74px -246px;
+}
+.bu_pptx_b {
+	width:35px;
+	height:44px;
+	background-position:-74px -246px;
+}
+.bu_nppt_b {
+	width:33px;
+	height:44px;
+	padding:3px 0 0 8px;
+	margin-left:-8px;
+	background-position:-258px -657px;
+}
+.bu_nppt_b .thm_url {
+	left:0;
+}
+.bu_xls_b {
+	width:35px;
+	height:44px;
+	background-position:-111px -246px;
+}
+.bu_xlsx_b {
+	width:35px;
+	height:44px;
+	background-position:-111px -246px;
+}
+.bu_nxls_b {
+	width:35px;
+	height:44px;
+	padding:3px 0 0 8px;
+	margin-left:-8px;
+	background-position:-86px -657px;
+}
+.bu_nxls_b .thm_url {
+	left:0;
+}
+.bu_nfrm_b {
+	width:35px;
+	height:44px;
+	padding:3px 0 0 8px;
+	margin-left:-8px;
+	background-position:-342px -657px;
+}
+.bu_nfrm_b .thm_url {
+	left:0;
+}
+.bu_hwp_b {
+	width:35px;
+	height:44px;
+	background-position:-148px -246px;
+}
+.bu_hml_b {
+	width:35px;
+	height:44px;
+	background-position:-148px -246px;
+}
+.bu_txt_b {
+	width:35px;
+	height:44px;
+	background-position:-185px -246px;
+}
+.bu_pdf_b {
+	width:35px;
+	height:44px;
+	background-position:-222px -246px;
+}
+.bu_htm_b {
+	width:35px;
+	height:44px;
+	background-position:-259px -246px;
+}
+.bu_exe_b {
+	width:35px;
+	height:44px;
+	background-position:-296px -246px;
+}
+.bu_gul_b {
+	width:35px;
+	height:44px;
+	background-position:-334px -246px;
+}
+.bu_fla_b {
+	width:35px;
+	height:44px;
+	background-position:0 -295px;
+}
+.bu_mov_b {
+	width:35px;
+	height:44px;
+	background-position:-37px -295px;
+}
+.bu_mp3_b {
+	width:35px;
+	height:44px;
+	background-position:-74px -295px;
+}
+.bu_zip_b {
+	width:35px;
+	height:44px;
+	background-position:-111px -295px;
+}
+.bu_etc_b {
+	width:35px;
+	height:44px;
+	background-position:-148px -295px;
+}
+.bu_exc_b {
+	width:35px;
+	height:44px;
+	background-position:-185px -295px;
+}
+.bu_ing_b {
+	width:35px;
+	height:44px;
+	background-position:-222px -295px;
+}
+.bu_fail_b {
+	width:35px;
+	height:44px;
+	background:url(https://ssl.pstatic.net/static/pwe/ndrive/2011/sp_process.png) no-repeat 0 0;
+}
+.bu_send_b {
+	width:35px;
+	height:44px;
+	background:url(https://ssl.pstatic.net/static/pwe/ndrive/2011/sp_process.png) no-repeat 0 -50px;
+}
+.bu_send_b .thm_url {
+	left:-6px;
+	bottom:-4px;
+}
+.bu_folder_b_dim {
+	width:33px;
+	height:28px;
+	background-position:-277px -123px;
+}
+.bu_shared_b_dim {
+	width:39px;
+	height:31px;
+	margin:0 0 -3px -6px;
+	background-position:left -805px;
+}
+.bu_sharing_b_dim {
+	width:39px;
+	height:32px;
+	margin:0 0 -3px -6px;
+	background-position:-43px -805px;
+}
+.bu_sharing_b_dim .thm_url {
+	left:11px;
+	bottom:0;
+}
+.bu_share_all_b_dim {
+	width:40px;
+	height:31px;
+	margin:0 -1px -3px -6px;
+	background-position:-86px -805px;
+}
+.bu_url_b_dim {
+	width:34px;
+	height:28px;
+	margin:0 -1px 0 0;
+	background-position:-135px -805px;
+}
+.bu_img_b_dim {
+	width:35px;
+	height:44px;
+	background-position:-0 -443px;
+}
+.bu_doc_b_dim {
+	width:35px;
+	height:44px;
+	background-position:-37px -443px;
+}
+.bu_docx_b_dim {
+	width:35px;
+	height:44px;
+	background-position:-37px -443px;
+}
+.bu_ndoc_b_dim {
+	width:33px;
+	height:44px;
+	padding:3px 0 0 8px;
+	margin-left:-8px;
+	background-position:-215px -657px;
+}
+.bu_ppt_b_dim {
+	width:35px;
+	height:44px;
+	background-position:-74px -443px;
+}
+.bu_pptx_b_dim {
+	width:35px;
+	height:44px;
+	background-position:-74px -443px;
+}
+.bu_nppt_b_dim {
+	width:33px;
+	height:44px;
+	padding:3px 0 0 8px;
+	margin-left:-8px;
+	background-position:-301px -657px;
+}
+.bu_nppt_b_dim .thm_url {
+	left:0;
+}
+.bu_xls_b_dim {
+	width:35px;
+	height:44px;
+	background-position:-111px -443px;
+}
+.bu_xlsx_b_dim {
+	width:35px;
+	height:44px;
+	background-position:-111px -443px;
+}
+.bu_nxls_b_dim {
+	width:33px;
+	height:44px;
+	padding:3px 0 0 8px;
+	margin-left:-8px;
+	background-position:-129px -657px;
+}
+.bu_nxls_b_dim .thm_url {
+	left:0;
+}
+.bu_nfrm_b_dim {
+	width:35px;
+	height:44px;
+	padding:3px 0 0 8px;
+	margin-left:-8px;
+	background-position:-385px -657px;
+}
+.bu_nfrm_b_dim .thm_url {
+	left:0;
+}
+.bu_hwp_b_dim {
+	width:35px;
+	height:44px;
+	background-position:-148px -443px;
+}
+.bu_txt_b_dim {
+	width:35px;
+	height:44px;
+	background-position:-185px -443px;
+}
+.bu_pdf_b_dim {
+	width:35px;
+	height:44px;
+	background-position:-222px -443px;
+}
+.bu_htm_b_dim {
+	width:35px;
+	height:44px;
+	background-position:-259px -443px;
+}
+.bu_exe_b_dim {
+	width:35px;
+	height:44px;
+	background-position:-296px -443px;
+}
+.bu_gul_b_dim {
+	width:35px;
+	height:44px;
+	background-position:-334px -443px;
+}
+.bu_fla_b_dim {
+	width:35px;
+	height:44px;
+	background-position:0 -492px;
+}
+.bu_mov_b_dim {
+	width:35px;
+	height:44px;
+	background-position:-37px -492px;
+}
+.bu_mp3_b_dim {
+	width:35px;
+	height:44px;
+	background-position:-74px -492px;
+}
+.bu_zip_b_dim {
+	width:35px;
+	height:44px;
+	background-position:-111px -492px;
+}
+.bu_etc_b_dim {
+	width:35px;
+	height:44px;
+	background-position:-148px -492px;
+}
+.bu_exc_b_dim {
+	width:35px;
+	height:44px;
+	background-position:-185px -492px;
+}
+.bu_fail_b_dim {
+	width:35px;
+	height:44px;
+	background:url(https://ssl.pstatic.net/static/pwe/ndrive/2011/sp_process_dim.png) no-repeat 0 0;
+}
+.bu_send_b_dim {
+	width:35px;
+	height:44px;
+	background:url(https://ssl.pstatic.net/static/pwe/ndrive/2011/sp_process_dim.png) no-repeat 0 -50px;
+}
+.bu_send_b_dim .thm_url {
+	left:-6px;
+	bottom:-4px;
+}
+.bu_basket,.bu_last_update,.bu_last_open,.bu_naverdoc_on {
+	background-image:url(https://ssl.pstatic.net/static/pwe/ndrive/deskhome/spr_lft_menu.png);
+	background-repeat:no-repeat;
+}
+.bu_basket {
+	width:16px;
+	height:17px;
+	background-position:-232px -83px;
+}
+.bu_last_update {
+	width:14px;
+	height:14px;
+	background-position:-232px -112px;
+}
+.bu_last_open {
+	width:15px;
+	height:11px;
+	background-position:-232px -138px;
+}
+.bu_naverdoc_on {
+	width:12px;
+	height:13px;
+	background-position:-232px -164px;
+}
+.bu_question {
+	width:14px;
+	height:13px;
+	background:url(https://ssl.pstatic.net/static/pwe/ndrive/2011/ico_question.gif) no-repeat left top;
+	vertical-align:middle;
+}
+
+.panel-body {
+	padding: 0px;
+}
