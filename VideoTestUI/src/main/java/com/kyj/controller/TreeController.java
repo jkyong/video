@@ -3,8 +3,6 @@ package com.kyj.controller;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.inject.Inject;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -29,8 +27,8 @@ public class TreeController {
 		List<Structure> result = new ArrayList<>();
 		
 		recursion = new Recursion();
-		
-		result = recursion.addRootTree(result, dataList);				
+
+		result = recursion.addRootTree(result, dataList);
 		
 //		System.out.println("dataList : " + dataList + "result : " + result);
 		return result;		

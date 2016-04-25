@@ -6,7 +6,6 @@ import com.kyj.domain.Structure;
 
 public class Recursion {
 	
-	// ��͵��鼭 Ʈ���� �߰�
 	public void addItem(List<Structure> result, List<Structure> dataList, int index) {
 		for (int i = 0; i < result.size(); i++) {
 			try {
@@ -40,7 +39,6 @@ public class Recursion {
 
 	}
 
-	// Ʈ�� �߰� ����
 	public List<Structure> addRootTree(List<Structure> result, List<Structure> dataList) {
 
 		for (int i = 0; i < dataList.size(); i++) {

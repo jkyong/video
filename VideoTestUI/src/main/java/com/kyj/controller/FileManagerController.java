@@ -339,7 +339,7 @@ public class FileManagerController {
 				long id = structureAll.get(i).getKey(); 
 				String appendPath = structureAll.get(i).getTitle();
 				
-			/*	for ( int k =0; k < fileInfoAll.size(); k++) {
+/*				for ( int k =0; k < fileInfoAll.size(); k++) {
 					if ( fileInfoAll.get(k).getStructure_id() == id) {
 						dataFolder.add(structureAll.get(i).getTitle() + "/" + fileInfoAll.get(k).getName() + "." + fileInfoAll.get(k).getExtension());
 					}
@@ -361,15 +361,19 @@ public class FileManagerController {
 			if ( subId == structureAllPid) {
 				long id = structureAll.get(i).getKey();
 				
+				
+				appendPath = appendPath + "/" + structureAll.get(i).getTitle();
+				dataFolder.add(appendPath);
 				for ( int k =0; k < fileInfoAll.size(); k++) {
 					if ( fileInfoAll.get(k).getStructure_id() == subId) {
 						dataFolder.add(appendPath + "/" + fileInfoAll.get(k).getName() + "." + fileInfoAll.get(k).getExtension());						
 					}
+					else {
+					}
 				}
-				appendPath = appendPath + "/" + structureAll.get(i).getTitle();
+				
 				re(structureAll, fileInfoAll, dataFolder, id, appendPath);
 				
-				dataFolder.add(appendPath);
 				appendPath = "";
 			}
 			
