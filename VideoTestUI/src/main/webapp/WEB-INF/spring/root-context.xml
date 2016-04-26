@@ -43,6 +43,7 @@
 			</bean>
 		</property>
 	</bean>
-	
-	
+
+<!-- 	<import resource="security.xml"/> -->
+
 </beans>
