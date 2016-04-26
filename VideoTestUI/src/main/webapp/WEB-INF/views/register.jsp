@@ -1,5 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -7,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
-<title>PartDB Video Server Login</title>
+<title>Bootstrap 101 Template</title>
 
 <!-- Bootstrap -->
 <link href="${pageContext.request.contextPath}/resources/bootstrap/css/bootstrap.min.css" rel="stylesheet">
@@ -71,18 +70,15 @@ body {
 <body>
 	<div class="container">
 
-		<form class="form-signin" role="form" action="/videoui/j_spring_security_check" method="POST">
-			<h2 class="form-signin-heading">Log in</h2>			
-			<input type="text" id="inputEmail" name='j_username' class="form-control" placeholder="Email address" required autofocus> 
-			<input type="password" id="inputPassword" name='j_password' class="form-control" placeholder="Password" required>
+		<form class="form-signin" role="form" action="saveUser" method="POST">
+			<h2 class="form-signin-heading">Please sign in</h2>
+			<input type="text" id="inputName" name='name' class="form-control" placeholder="Name" required autofocus>
+			<input type="text" id="inputEmail" name='email' class="form-control" placeholder="Email address" required autofocus> 
+			<input type="password" id="inputPassword" name='password' class="form-control" placeholder="Password" required>
 						
 			<button class="btn btn-lg btn-primary btn-block" type="submit">
-				Log in
+				Sign in
 			</button>
-			
-			<div class="btn btn-md btn-default btn-block">
-				<a href="register">Register this site</a>
-			</div>
 		</form>
 	</div>
 	<!-- /container -->
