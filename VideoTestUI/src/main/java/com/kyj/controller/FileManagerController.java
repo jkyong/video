@@ -353,43 +353,93 @@ public class FileManagerController {
 		Children c = new Children();
 		list = c.getChildrenObj(structureAll, folderId);
 		
-		re(list, structureAll, fileInfoAll, fullPathList, appendPath);
-		System.out.println(fullPathList);
+		re(list, structureAll, fullPathList, appendPath, "");
+		for ( int i = 0 ; i < fullPathList.size(); i++)
+			System.out.println(fullPathList.get(i));
 	}
 	
-	public void re(List<Structure> list, List<Structure> structureAll, List<FileInfo> fileInfoAll, List<String> fullPathList, String appendPath) {
-		System.out.println("in");
+	public void re(List<Structure> list, List<Structure> structureAll, List<String> fullPathList, String appendPath, String upperPath) {
+		String twoUpperPath = "";
+		
+		for ( int i =0; i < list.size(); i++) {
+			long id = list.get(i).getKey();
+			
+			Children c = new Children();
+			
+			List<Structure> lst = c.getChildrenObj(structureAll, id);
+			
+			// 하위 없음
+			if ( lst.size() == 0) {
+				
+				appendPath = upperPath + "/" + list.get(i).getTitle();
+				fullPathList.add(appendPath);
+//				appendPath = beforePath;
+				
+			}
+			else {
+				// 재귀
+				twoUpperPath = upperPath;
+				upperPath = appendPath;
+				if ( twoUpperPath == "")
+					appendPath = upperPath + "/" + list.get(i).getTitle();
+				else
+					appendPath = twoUpperPath + "/" + list.get(i).getTitle();
+				
+				re(lst, structureAll, fullPathList, appendPath, upperPath);
+				appendPath = "";
+			}
+			
+		}
+		
+	}
+	
+	/*public void re(List<Structure> list, List<Structure> structureAll, List<FileInfo> fileInfoAll, List<String> fullPathList, String appendPath) {
 		for ( int i =0; i < list.size(); i++) {
 			long id = list.get(i).getKey();
 			
 			Children c = new Children();
 			
 			List<Structure> l = c.getChildrenObj(structureAll, id);
+
 			if ( l.size() == 0) {
-				System.out.println("size 0");
 				// 파일만 확인
 				for ( int k = 0; k < fileInfoAll.size(); k++) {
 					if ( id == fileInfoAll.get(k).getStructure_id())
-						fullPathList.add(new String(fileInfoAll.get(k).getName()));
+						fullPathList.add(new String(fileInfoAll.get(k).getName() + "." + fileInfoAll.get(k).getExtension()));
 					
 					if ( k == fileInfoAll.size() - 1 ) {
 						appendPath = appendPath + "/" + list.get(i).getTitle();
 						fullPathList.add(new String(appendPath));
 					}
 				}
-				appendPath = "";
+	//			appendPath = "";
 			}
 			else {
 				// 재귀
 				for ( int k = 0; k < l.size(); k++) {
-					if ( !appendPath.contains(l.get(k).getTitle()))
-						appendPath = appendPath + "/" + list.get(i).getTitle();
+					if ( !appendPath.contains(l.get(k).getTitle())) {
+						if ( k == 0)
+							appendPath = appendPath + "/" + list.get(i).getTitle();
+						
+						for ( int j = 0; j < fileInfoAll.size(); j++) {
+							if ( id == fileInfoAll.get(j).getStructure_id()) {
+							
+								fullPathList.add(new String(appendPath + "/" + fileInfoAll.get(j).getName() + "." + fileInfoAll.get(j).getExtension()));
+							}
+						}
+					}
 				}
 	//			fullPathList.add(new String(appendPath));
 				re(l, structureAll, fileInfoAll, fullPathList, appendPath);
+				if ( i + 1 > list.size() - 1) {
+					
+				}
+				else {
+					appendPath = "";
+				}
 			}
 		}
 		
-	}
+	}*/
 	
 }

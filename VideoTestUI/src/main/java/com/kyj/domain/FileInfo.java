@@ -19,7 +19,7 @@ import org.hibernate.validator.constraints.Length;
 @Table(name = "fileinfo")
 public class FileInfo {
 	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private long id;
 	
 	@Size(max = 200)
