@@ -60,10 +60,10 @@
 		</div>
 		<div class="col-xs-9">
 			<div class="row">
-				<div class="col-xs-9">
+				<div class="col-xs-12">
 					<jsp:include page="include/itemMenu.jsp" />
 				</div>
-				<div class="col-xs-9" style="height: 600px;">
+				<div class="col-xs-12" style="height: 600px;">
 					<jsp:include page="include/fileList.jsp" />
 				</div>
 			</div>

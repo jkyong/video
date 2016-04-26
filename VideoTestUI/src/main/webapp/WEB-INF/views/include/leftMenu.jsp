@@ -19,7 +19,6 @@
 <!-- panel group -->
 <div class="panel-group">
 
-
 	<div class="panel panel-default">
 		<div class="panel-heading">
 			<h4 class="panel-title">
@@ -41,7 +40,7 @@
 				<a data-toggle="collapse" href="#collapse2">Explorer</a>
 			</h4>
 		</div>
-		<div id="collapse2" class="panel-collapse collapse">
+		<div id="collapse2" class="panel-collapse collapse in">
 			<!-- <div class="panel-body" style="background-color: black;">aaaaaaaa</div> -->
 			<div class="panel-body" style="height: 100%;">
 				<div id="treeItem" style="height: 100%;"></div>

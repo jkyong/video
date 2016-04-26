@@ -183,7 +183,8 @@
 	});
 </script>
 
-<form class="navbar-form navbar-left" role="search">
+
+<form class="navbar-form navbar-right" role="search">
 	<div class="form-group">
 		<input type="text" class="form-control" placeholder="Search">
 	</div>
@@ -213,16 +214,10 @@
 		<button type="button" class="btn btn-primary delete">
 			<span class="glyphicon glyphicon-remove"></span> remove
 		</button>
+		
 	</div>
-</div>
-
-
-<div class="navbar-form btn-group btn-group-md pull-right">
-	<button type="button" class="btn btn-primary testbtn" data-toggle="modal"
-		data-target="#pathSelector">
-		<span class="glyphicon glyphicon-remove"></span> TEST
-	</button>
-
+	
+	
 </div>
 
 <!-- move modal -->

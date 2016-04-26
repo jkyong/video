@@ -44,6 +44,6 @@
 		</property>
 	</bean>
 
-<!-- 	<import resource="security.xml"/> -->
+	<import resource="security.xml"/>
 
 </beans>
