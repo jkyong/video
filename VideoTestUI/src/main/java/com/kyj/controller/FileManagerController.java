@@ -29,6 +29,7 @@ import com.kyj.domain.FileInfo;
 import com.kyj.domain.Structure;
 import com.kyj.persistence.FileInfoDAO;
 import com.kyj.persistence.StructureDAO;
+import com.kyj.tree.Children;
 
 @Controller
 public class FileManagerController {
@@ -327,144 +328,68 @@ public class FileManagerController {
 		
 		Structure struc = structure.find(folderId);
 		
-		List<Structure> children = structure.findChildren(folderId);
+	//	List<Structure> children = structure.findChildren(folderId);
 		
 		List result = new ArrayList();
 		
 		String defaultPath = "C:/";
 		String path;
-		for ( int i = 0; i < children.size(); i++) {
+/*		for ( int i = 0; i < children.size(); i++) {
 			path = defaultPath + "/" +children.get(i).getTitle();
-		}
+		}*/
 		
 		List<String> fullPathList = new ArrayList<>();
-	
-		long upperId = folderId;
-		System.out.println(upperId);
-/*		for( int i = 0; i < structureAll.size(); i++) {
-			long subId = structureAll.get(i).getPid();
+		String appendPath = "";
+
+	/*	for ( int i =0; i < children.size(); i++) {
+			System.out.println(children.get(i).getTitle());
+			System.out.println(children.get(i).getChildren().size());
 			
-			if ( subId == upperId ) {
-				long id = structureAll.get(i).getKey(); 
-				String appendPath = structureAll.get(i).getTitle();*/
-				
-				re(structureAll, fileInfoAll, fullPathList, folderId, "");
-/*			}
-			
-		}
-*/		
-		for ( int j = 0; j < fullPathList.size(); j++)
-			System.out.println(fullPathList.get(j));
-	}
+			if ( !children.get(i).getChildren().isEmpty()) {
+				System.out.println(children.get(i).getChildren().get(0).getTitle());
+			}
+		}*/
+		List<Structure> list = new ArrayList<>();
+		Children c = new Children();
+		list = c.getChildrenObj(structureAll, folderId);
 		
-	public void re(List<Structure> structureAll, List<FileInfo> fileInfoAll, List<String> fullPathList, long forderId, String appendPath) {
-		for ( int i = 0; i < structureAll.size(); i++) {
-			long pid = structureAll.get(i).getPid();
+		re(list, structureAll, fileInfoAll, fullPathList, appendPath);
+		System.out.println(fullPathList);
+	}
+	
+	public void re(List<Structure> list, List<Structure> structureAll, List<FileInfo> fileInfoAll, List<String> fullPathList, String appendPath) {
+		System.out.println("in");
+		for ( int i =0; i < list.size(); i++) {
+			long id = list.get(i).getKey();
 			
-			if ( forderId == pid) {
-				long id = structureAll.get(i).getKey();
-				
-				for ( int k =0; k < fileInfoAll.size(); k++) {
-					if ( fileInfoAll.get(k).getStructure_id() == pid) {
-						fullPathList.add(appendPath + "/" + fileInfoAll.get(k).getName() + "." + fileInfoAll.get(k).getExtension());						
-					}
-					else {
-						if ( k == fileInfoAll.size() - 1) {
-							fullPathList.add(appendPath);					
-							
-						}
+			Children c = new Children();
+			
+			List<Structure> l = c.getChildrenObj(structureAll, id);
+			if ( l.size() == 0) {
+				System.out.println("size 0");
+				// 파일만 확인
+				for ( int k = 0; k < fileInfoAll.size(); k++) {
+					if ( id == fileInfoAll.get(k).getStructure_id())
+						fullPathList.add(new String(fileInfoAll.get(k).getName()));
+					
+					if ( k == fileInfoAll.size() - 1 ) {
+						appendPath = appendPath + "/" + list.get(i).getTitle();
+						fullPathList.add(new String(appendPath));
 					}
 				}
-				appendPath = appendPath + "/" + structureAll.get(i).getTitle();
-				
-				re(structureAll, fileInfoAll, fullPathList, id, appendPath);
-				
-		//		appendPath = appendPath + "/" + structureAll.get(i).getTitle();
-				
 				appendPath = "";
 			}
 			else {
-				if ( i == structureAll.size() - 1) {
-					for ( int k =0; k < fileInfoAll.size(); k++) {
-						if ( fileInfoAll.get(k).getStructure_id() == pid) {
-							fullPathList.add(appendPath + "/" + fileInfoAll.get(k).getName() + "." + fileInfoAll.get(k).getExtension());						
-						}
-					}
+				// 재귀
+				for ( int k = 0; k < l.size(); k++) {
+					if ( !appendPath.contains(l.get(k).getTitle()))
+						appendPath = appendPath + "/" + list.get(i).getTitle();
 				}
+	//			fullPathList.add(new String(appendPath));
+				re(l, structureAll, fileInfoAll, fullPathList, appendPath);
 			}
-			
-		/*	if ( i == structureAll.size() - 1) {
-				for ( int k = 0; k < fileInfoAll.size(); k++) {
-					if ( fileInfoAll.get(k).getStructure_id() == structureAllPid) {
-						dataFolder.add(fileInfoAll.get(k).getName());
-					}
-				}
-			}*/
 		}
-	}
-	
-	public void addFile(List<FileInfo> fileInfoAll) {
 		
 	}
 	
-	public void addItem(List result, List<Structure> dataList, int index) {
-		for (int i = 0; i < result.size(); i++) {
-			try {
-				long resultId = ((Structure) result.get(i)).getKey();
-
-				long dataListId = dataList.get(index).getKey();
-				String dataListTitle = dataList.get(index).getTitle();
-				long dataListPid = dataList.get(index).getPid();
-//				boolean dataListFolder = dataList.get(index).getFolder();
-
-				if (resultId == dataListPid) {
-					Structure data = new Structure();
-					data.setKey(dataListId);
-					data.setTitle(dataListTitle);
-					data.setPid(dataListPid);
-//					data.setFolder(dataListFolder);
-					data.setFolder(true);
-
-					((Structure) result.get(i)).getChildren().add(data);
-				} else {
-					if (((Structure) result.get(i)).getChildren().size() != 0)
-						addItem(((Structure) result.get(i)).getChildren(), dataList, index);
-					else {
-
-					}
-				}
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		}
-
-	}
-
-	// Ʈ�� �߰� ����
-	public List<Structure> addRootTree(List result, List<Structure> dataList, long folderId) {
-
-		for (int i = 0; i < dataList.size(); i++) {
-			long id = dataList.get(i).getKey();			
-			String title = dataList.get(i).getTitle();
-			long pid = dataList.get(i).getPid();
-			
-//			boolean folder = dataList.get(i).getFolder();
-			// root
-			if (pid == folderId) {
-				Structure data = new Structure();
-				data.setKey(id);
-				data.setTitle(title);
-				data.setPid(pid);
-//				data.setFolder(folder);
-				data.setFolder(true);
-				result.add(data);
-			} else {
-//				for (int j = 0; j < result.size(); j++) {
-					addItem(result, dataList, i);
-//				}
-			}
-		}
-		return result;
-		
-	}
 }
