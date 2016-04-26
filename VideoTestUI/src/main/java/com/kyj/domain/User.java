@@ -17,7 +17,7 @@ public class User implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private int id;
 
 	private String email;
@@ -26,6 +26,8 @@ public class User implements Serializable {
 
 	private String password;
 
+	private boolean enabled;
+
 	//bi-directional many-to-many association to Role
 	@ManyToMany
 	@JoinTable
@@ -33,7 +35,15 @@ public class User implements Serializable {
 
 	public User() {
 	}
+	
+	public boolean isEnabled() {
+		return enabled;
+	}
 
+	public void setEnabled(boolean enabled) {
+		this.enabled = enabled;
+	}
+	
 	public int getId() {
 		return this.id;
 	}
