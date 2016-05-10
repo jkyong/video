@@ -44,22 +44,18 @@ public class StructureDAOImpl implements StructureDAO{
 	}
 	
 	@Transactional
-	public List<FileInfo> remove(long id) {
+	public void remove(long id) {
 		Structure structure = em.find(Structure.class, id);
-		List<FileInfo> fileInfo = structure.getFileInfo();		
-		Query query = em.createQuery("delete from Structure s where s.id = :id or s.pid = :id");
-		
-		query.setParameter("id", id);
-		query.executeUpdate();
-		
-		return fileInfo;
+		if ( structure != null) {
+			em.remove(structure);
+		}
 	}
 
 	@Transactional
 	public void update(long id, String title) {
-		// TODO Auto-generated method stub
 		Structure structure = em.find(Structure.class, id);
 		structure.setTitle(title);
+		System.out.println("id " + id + ", title" + title);
 	}
 	
 	@Transactional

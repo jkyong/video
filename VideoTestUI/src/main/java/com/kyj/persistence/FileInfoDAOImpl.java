@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.kyj.domain.FileInfo;
+import com.kyj.domain.Structure;
 
 @Repository
 public class FileInfoDAOImpl implements FileInfoDAO {
@@ -19,14 +20,15 @@ public class FileInfoDAOImpl implements FileInfoDAO {
 	
 	@Transactional
 	public long save(java.util.Calendar createDate, String path, String nameOnly, long size, String extension, long structure_id) {
+		Structure structure = em.find(Structure.class, structure_id);
+		
 		FileInfo fileInfo= new FileInfo();
-//		fileInfo.setUuid(uuid);
 		fileInfo.setCreateDate(createDate);
 		fileInfo.setPath(path);
 		fileInfo.setName(nameOnly);
 		fileInfo.setSize(size);
 		fileInfo.setExtension(extension);
-		fileInfo.setStructure_id(structure_id);
+		fileInfo.setStructure(structure);
 		
 		em.persist(fileInfo);
 		
@@ -34,31 +36,36 @@ public class FileInfoDAOImpl implements FileInfoDAO {
 	}
 
 	@Transactional
-	public FileInfo remove(long id) {
+	public void remove(long id) {
 		FileInfo files= em.find(FileInfo.class, id);
 		
-		em.remove(files);
-		
-		return files;
+		if ( files != null)
+			em.remove(files);
 	}
 	
 	@Transactional
 	public void move(long id, long moveId) {
 		FileInfo fileInfo= em.find(FileInfo.class, id);
 		
-		fileInfo.setStructure_id(moveId);		
+		Structure structure= em.find(Structure.class, moveId);
+		
+		fileInfo.setStructure(structure);
 	}
 	
 	
 	public List<FileInfo> partialSelect(long structure_id) {
-		TypedQuery<FileInfo> query = em.createQuery("select f from FileInfo f where f.structure_id = :structure_id", FileInfo.class);
-		query.setParameter("structure_id", structure_id);
+		Structure structure = em.find(Structure.class, structure_id);
 		
-		return query.getResultList();
+		return structure.getFileInfo();
+	}
+	
+	@Transactional
+	public void update(long id, String name) {
+		FileInfo fileInfo = em.find(FileInfo.class, id);
+		fileInfo.setName(name);
 	}
 
 	public FileInfo find(long id) {
-		// TODO Auto-generated method stub
 		FileInfo fileInfo = em.find(FileInfo.class, id);
 		
 		return fileInfo;

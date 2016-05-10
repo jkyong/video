@@ -14,12 +14,10 @@ public class Children {
 		for (int i = 0; i < dataList.size(); i++) {
 			long childrenPid = dataList.get(i).getPid();
 
-			// parent id �� pid�� ���� ������ �߰�
 			if (childrenPid == selectedId) {
 				childrenList.add(dataList.get(i));
 			}
 
-			// �˻��� ��������
 			if (i == dataList.size() - 1)
 				return childrenList;
 		}

@@ -15,6 +15,7 @@
 		<jackson.version>2.6.3</jackson.version>
 		<jstl.version>1.2</jstl.version>
 		<servletapi.version>3.1.0</servletapi.version>
+		<javax.servlet.version>3.0.1</javax.servlet.version>
 	</properties>
 
 	<dependencies>
@@ -133,8 +134,8 @@
 		<!-- Servlet -->
 		<dependency>
 			<groupId>javax.servlet</groupId>
-			<artifactId>servlet-api</artifactId>
-			<version>2.5</version>
+			<artifactId>javax.servlet-api</artifactId>
+			<version>${javax.servlet.version}</version>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
@@ -312,9 +313,9 @@
                 <configuration>
                     <mainClass>org.test.int1.Main</mainClass>
                 </configuration>
-            </plugin>            
-            
-             <plugin>
+            </plugin>    
+
+            <plugin>
 		      <groupId>com.mysema.maven</groupId>
 		      <artifactId>apt-maven-plugin</artifactId>
 		      <version>1.0.9</version>

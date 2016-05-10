@@ -15,5 +15,10 @@ public class UserDao {
 	public void save(User user) {		
 		userRepository.save(user);
 	}
-	
+
+	public User findOne(Integer id) {
+		User user = userRepository.findOne(id);
+		
+		return user;
+	}
 }

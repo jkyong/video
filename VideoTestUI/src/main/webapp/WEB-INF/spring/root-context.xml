@@ -51,5 +51,7 @@
 	<jpa:repositories base-package="com.kyj.repository" transaction-manager-ref="transactionManager"/>
 
 	<import resource="security.xml"/>
+	
+	<import resource="task.xml" />
 
 </beans>

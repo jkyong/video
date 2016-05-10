@@ -1,5 +1,6 @@
 package com.kyj.domain;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -37,10 +38,8 @@ public class FileInfo {
 	@Length(max = 5)
 	private String extension;
 	
-	private long structure_id;
-	
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "structure_id", nullable = false, insertable = false, updatable = false)
+	@ManyToOne(cascade = CascadeType.PERSIST, optional = false)
+	@JoinColumn(name = "structure_id", nullable = false)
 	private Structure structure;
 
 	public long getId() {
@@ -89,14 +88,6 @@ public class FileInfo {
 
 	public void setExtension(String extension) {
 		this.extension = extension;
-	}
-
-	public long getStructure_id() {
-		return structure_id;
-	}
-
-	public void setStructure_id(long structure_id) {
-		this.structure_id = structure_id;
 	}
 
 	public Structure getStructure() {

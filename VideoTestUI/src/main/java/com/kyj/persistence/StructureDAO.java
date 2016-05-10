@@ -12,7 +12,7 @@ public interface StructureDAO {
 	
 	public long save(String title, long pid);	
 	
-	public List<FileInfo> remove(long id);
+	public void remove(long id);
 	
 	public void update(long id, String title);
 	

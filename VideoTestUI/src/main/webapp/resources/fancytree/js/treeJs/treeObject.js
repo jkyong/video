@@ -1,19 +1,18 @@
 var treeObject = {
 	treeData : {
-		selectedId : {},
+		selectedId : null,
 
-		title : {},
+		title : null,
 
-		pid : {},	 
+		pid : null,
 	},
 	Init : function() {
 		$('#treeItem').fancytree({
-
 			
 			source : {
 				url : "db"
 			},
-			extensions: ["edit"],
+/*			extensions: ["edit"],
 		
 			edit: {
 				triggerCancel: ["esc"],
@@ -42,9 +41,9 @@ var treeObject = {
 					
 					console.log("save");
 					
-				/*	console.log("rename input : " + renameInput);
+					console.log("rename input : " + renameInput);
 					console.log("rename valid title : " + validTitle);
-					console.log("create valid : " + createValid);*/
+					console.log("create valid : " + createValid);
 										
 					if ( fileManager.mode == "create") {
 						console.log("fileManager.createMode true");
@@ -60,7 +59,7 @@ var treeObject = {
 							
 							fileManager.createSave();
 							fileManager.itemsAppend(treeObject.treeData.selectedId);
-							/*alert("create save end");*/
+							alert("create save end");
 							fileManager.mode = "idle";
 							console.log("create mode createValid file manager mode : " + fileManager.mode);
 							return true;
@@ -80,7 +79,7 @@ var treeObject = {
 						
 							fileManager.rename();
 							
-						/*	alert("rename true return");*/
+							alert("rename true return");
 //							fileManager.mode = "idle";
 							return true;
 						}
@@ -98,12 +97,12 @@ var treeObject = {
 					
 					// Simulate to start a slow ajax request...
 					
-				/*	setTimeout(function(){
+					setTimeout(function(){
 						$(data.node.span).removeClass("pending");
 						// Let's pretend the server returned a slightly modified
 						// title:
 						data.node.setTitle(data.node.title + "!");
-					}, 20000);*/
+					}, 20000);
 					
 					// We return true, so ext-edit will set the current user input
 					// as title
@@ -119,7 +118,7 @@ var treeObject = {
 						
 					}
 				}
-			},
+			},*/
 			select : function(event, data) {
 				var v = data.tree.getSelectedNodes().join(", ");
 					alert("v : " + v);
@@ -129,8 +128,8 @@ var treeObject = {
 				
 				treeObject.treeData.selectedId = data.node.key;
 				
-				var t = $('#treeItem').fancytree("getActiveNode");
-				/*			console.log("selected prev node : " + t.getPrevSibling());
+				/*var t = $('#treeItem').fancytree("getActiveNode");
+							console.log("selected prev node : " + t.getPrevSibling());
 				console.log("selected get index : " + t.getIndex());
 				console.log("selected get first child : " + t.getFirstChild());
 				console.log("selected node id : " + treeObject.treeData.selectedId);
@@ -139,7 +138,7 @@ var treeObject = {
 			},
 			dblclick : function(e, data) {
 				
-			}
+			},
 		});
 	}
 }

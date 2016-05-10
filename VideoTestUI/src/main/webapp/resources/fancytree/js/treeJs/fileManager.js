@@ -1,19 +1,17 @@
 var fileManager = {
 	renameInput : { },
-	mode : { },
+//	mode : { },
 	uploadedId : {},
 	uploadedName : [],
 	duplicatedFile : [],
 	//uploadFileName : { },
 	
 	// 웹 상 폴더 생성 표시
-	folderCreate : function() {
-		// alert("selected id : " +
-		// JSON.stringify(treeObject.treeData.selectedId));
+	/*folderCreate : function() {
 		var t = $("#treeItem").fancytree("getActiveNode");
 		var tempData = { title : "new folder", folder : true };
 		t.editCreateNode("child", tempData);
-	},
+	},*/
 	
 	// 생성한 폴더 db 저장
 	createSave : function() {
@@ -55,10 +53,16 @@ var fileManager = {
 				},
 				dataType : "json",
 				success : function(data) {
-					var selectedParent = $("#treeItem").fancytree('getTree').getNodeByKey(selectedId).parent;
-					
-					if ( selectedParent != null) { 
-						$("td._up").data('id', selectedParent.key);
+					var selectedParent = $("#treeItem").fancytree('getTree').getNodeByKey(selectedId);
+					if ( selectedParent == null) {
+						if ( selectedParent.getParent().title == 'root') {
+							console.log('ddff');
+						}
+					}
+					else {
+						if ( selectedParent.getParent().title != 'root') {
+							$("td._up").data('id', selectedParent.parent.key);
+						}
 					}
 					
 					if ( data.length != 0) {
@@ -188,106 +192,14 @@ var fileManager = {
 	
 			});
 		}
-		
-		
-		
 	},
 	
 	// 부모 폴더 선택하여 하위 폴더 불러온 상태에서 하위 폴더의 이름 바꿀 시 부모 폴더 갱신
-	updataParentFolder : function() {
+/*	updataParentFolder : function() {
 		var selectedNode = $("#treeItem").fancytree("getActiveNode");
 		var parentNode = selectedNode.getParent();
-		/*console.log("parent node : " + parentNode.key);*/
 		fileManager.itemsAppend(selectedNode.key);
-	/*	if ( parentNode.key != "root_1") {
-			$.ajax({
-				url : "fileList",
-				type : "GET",
-				data : {
-					id : parentNode.key
-				},
-				dataType : "json",
-				success : function(data) {
-					console.log(JSON.stringify(data));
-					if ( data.length != 0) {
-						$.each(data, function(i, item) {
-							var itemTitle = data[i].title;
-							
-							$.ajax({
-								url : "fileItem",
-								type : "GET",
-								dataType : "html",
-								success : function(htmlData) {
-									var $li = $('' + htmlData + '');
-									$li.find("._link_list_item_filename").text(itemTitle);
-									$li.find(".rate").text(i);
-	
-									if (i == 0) {
-										$("._item").remove();
-										$(".type_thumb").append($li);
-									} else
-										$(".type_thumb").append($li);
-								}
-							})
-						})
-					}
-					else {
-						$("._item").remove();
-					}
-	
-				},
-	
-				error : function(x, h, r) {
-					alert("update parent folder error " + x.status);
-				}
-	
-			})
-		}
-		else {
-			$.ajax({
-				url : "fileList",
-				type : "GET",
-				data : {
-					id : selectedNode.key
-				},
-				dataType : "json",
-				success : function(data) {
-					console.log(JSON.stringify(data));
-					if ( data.length != 0) {
-						$.each(data, function(i, item) {
-							var itemTitle = data[i].title;
-							
-							$.ajax({
-								url : "fileItem",
-								type : "GET",
-								dataType : "html",
-								success : function(htmlData) {
-									var $li = $('' + htmlData + '');
-									$li.find("._link_list_item_filename").text(itemTitle);
-									$li.find(".rate").text(i);
-	
-									if (i == 0) {
-										$("._item").remove();
-										$(".type_thumb").append($li);
-									} else
-										$(".type_thumb").append($li);
-								}
-							})
-						})
-					}
-					else {
-						$("._item").remove();
-					}
-	
-				},
-	
-				error : function(x, h, r) {
-					alert("update parent folder error " + x.status);
-				}
-	
-			})
-		}*/
-	},
+	},*/
 
 	// 선택한 파일 삭제
 	remove : function() {
@@ -358,9 +270,13 @@ var fileManager = {
 			showDone: true,
 			showCancel: true,
 			showDelete: false,
-			showAbort: true,
+			showAbort: false,
 			allowDuplicates: false,
-//			showStatusAfterSuccess: false,
+			uploadStr: "Select Files",
+			showStatusAfterSuccess: false,
+			errorClass: "ajax-file-upload-error alert alert-danger",
+			statusBarWidth: 558,
+			dragdropWidth: 568,
 //			allowedTypes: "mp4,wmv,mkv,avi",
 //			formData: { "selectedId": treeObject.treeData.selectedId },
 			dynamicFormData: function() {
@@ -372,18 +288,39 @@ var fileManager = {
 			},
 			onSelect:function(files) {
 				// selected file add array
-				if ( files.length != 0) {
+				
+				// files 와 fileManager.uploadedName 비교해서 같은게 있으면 alert 없으면 push
+				for ( var i = 0; i < files.length; i++) {
+					if ( fileManager.uploadedName == files[i].name) {
+						alert(files[i] );
+						break;
+					}
+					else {
+						if ( i == files.length - 1) {
+							for ( var i = 0; i < files.length; i++) {
+								fileManager.uploadedName.push(files[i].name);
+							}
+						}
+					}
+					
+				}
+				
+			/*	if ( files.length != 0) {
 					for ( var i = 0; i < files.length; i++) {
 						fileManager.uploadedName.push(files[i].name);
 					}
-				}
+					console.log(fileManager.uploadedName);
+				}*/
 			},
 			onSuccess:function(files,data,xhr,pd)
 			{
 			    //files: list of files
 			    //data: response from server
 			    //xhr : jquer xhr object
-				
+				fileManager.uploadedName = $.grep(fileManager.uploadedName, function(value) {
+					return value != files;
+				});
+				console.log('success : ' + fileManager.uploadedName);
 				fileManager.itemsAppend(treeObject.treeData.selectedId);
 			},
 			onError: function(files,status,errMsg,pd)
@@ -410,22 +347,28 @@ var fileManager = {
 				console.log(JSON.stringify(obj));
 				console.log(obj.existingFileNames[0]);
 			
-				fileManager.uploadedName.shift(); // first element removed
-				fileManager.uploadedName = fileManager.uploadedName.slice(1); // first element removed
-				fileManager.uploadedName.splice(0,1); // first element removed
-				fileManager.uploadedName.pop(); // last element removed
-			/*	for ( var i = 0; i < obj.existingFileNames.length; i++) {
-					var completeName = files;
-					
-				    fileManager.uploadedName = $.grep(fileManager.uploadedName, function(value) {
-				    	return value != completeName;
-				    });
-				}*/
+//				fileManager.uploadedName.shift(); // first element removed
+//				fileManager.uploadedName = fileManager.uploadedName.slice(1); // first element removed
+//				fileManager.uploadedName.splice(0,1); // first element removed
+//				fileManager.uploadedName.pop(); // last element removed
+				
+				console.log('after upload : ' + fileManager.uploadedName);
+				$('.uploadCancel').removeClass('disabled');
+				$('.startUpload').removeClass('disabled');
+				$('.uploadCancel').prop('disabled', false);
+				$('.startUpload').prop('disabled', false);
+				
 			},
 		});
 		
-		$("#extrabutton").off('click').on('click', function() {
-			if ( fileManager.uploadedName.length != 0) {
+		$("#extrabutton").on('click', function() {		
+			
+			if ( fileManager.uploadedName.length > 0) {
+				$('.uploadCancel').addClass('disabled');
+				$('.startUpload').addClass('disabled');
+				$('.uploadCancel').prop('disabled', true);
+				$('.startUpload').prop('disabled', true);
+				
 				$.ajax({
 					url : "uploadFileValid",
 					async : false,
@@ -438,16 +381,14 @@ var fileManager = {
 					success : function(duplicatedFile) {
 						if ( duplicatedFile.length == 0 ) {
 							extraObj.startUpload();
-							
-							// delete all array
-//							fileManager.uploadedName.shift(); // first element removed
-//							fileManager.uploadedName = fileManager.uploadedName.slice(1); // first element removed
-//							fileManager.uploadedName.splice(0,1); // first element removed
-//							fileManager.uploadedName.pop(); // last element removed
-							
 						}
 						else {
 							alert(duplicatedFile[0] + ' already exist.');
+							
+							$('.uploadCancel').removeClass('disabled');
+							$('.startUpload').removeClass('disabled');
+							$('.uploadCancel').prop('disabled', false);
+							$('.startUpload').prop('disabled', false);
 						}
 					},
 					error : function() {
@@ -459,24 +400,42 @@ var fileManager = {
 				alert('file is empty');
 			}
 			
-			
 		});
-		
 	},
 	
-	// 이름 바꾸기
-	rename : function() {
+	// 폴더명 바꾸기 
+	renameFolder : function(folderId, renameFolder) {
 		$.ajax({
-			url : "rename",
+			url : "renameFolder",
 			type : "GET",
+			async : false,
 			data : {
-				id : treeObject.treeData.selectedId,
-				title : fileManager.renameInput
+				folderId : folderId,
+				title : renameFolder
 			},
 			success : function() {
-				console.log("rename get selected id " + treeObject.treeData.selectedId);
-							
-		//		fileManager.updataParentFolder();
+				var $tree = $('#treeItem').fancytree('getTree');
+				$tree.reload().done(function(){
+					$tree.getNodeByKey(treeObject.treeData.selectedId).setActive();
+		        });
+			},
+			error : function(x) {
+				console.log(x.status + "rename error");
+			}
+		})	
+	},
+	
+	// 파일명 바꾸기
+	renameFile : function(fileId, renameFile) {
+		$.ajax({
+			url : "renameFile",
+			type : "GET",
+			async : false,
+			data : {
+				fileId : fileId,
+				name : renameFile
+			},
+			success : function() {
 			
 			},
 			error : function(x) {
@@ -485,51 +444,67 @@ var fileManager = {
 		})	
 	},
 
-	// 이름 바꿀 때 유효성 검사
-	renameValid : function(title) {
-		var node = $('#treeItem').fancytree("getActiveNode");
-		var nextNode = node.getNextSibling();
-		var prevNode = node.getPrevSibling();
+	renameValid : function(renameObj, renameInput) {
+		var split = renameObj[0].split("_");
 		
-
-		while (true) {
-
-			if (nextNode != null) {
-				/*console.log("nextNode not null : " + nextNode.title);*/
-				if (title == nextNode.title) {
-					// 동일 이름 존재
-					/*console.log("next node alreay exist");*/
-//					alert("동일 이름 존재");
-					return false;
+		var objType = split[0];
+		var key = split[1];
+		
+		console.log(objType);
+		console.log(key);
+		if ( objType == 'folderId') {
+			$.ajax({
+				url : "renameFolderValid",
+				async : false,
+				data : {
+					pid : treeObject.treeData.selectedId,
+					folderId : key,
+					renameInput : renameInput
+				},
+				success : function(rename) {					
+					if ( rename == '') {
+						fileManager.renameInput = rename;
+					}
+					else {
+						fileManager.renameInput = rename;
+						fileManager.renameFolder(key, fileManager.renameInput);
+						fileManager.itemsAppend(treeObject.treeData.selectedId);
+						
+					}
+				},
+				error : function(e) {
+					alert(e.status);
 				}
-				else {
-					/*console.log("title : " + title + ", next node : " + nextNode.title);*/
-		//			alert("title : " + title + ", next node : " + nextNode.title);
-					nextNode = nextNode.getNextSibling();					
-				}
-			}
-
-			if (prevNode != null) {
-				/*console.log("prevNode not null");*/
-				if (title == prevNode.title) {
-					// 동일 이름 존재
-					/*console.log("prev node alreay exist");*/
-					return false;
-				}
-				else {
-				/*	console.log("title : " + title + ", prev node : " + prevNode.title);*/
-	//				alert("title : " + title + ", prev node : " + prevNode.title);
-					prevNode = prevNode.getPrevSibling();					
-				}				
-			}
-			
-
-			if (nextNode == null && prevNode == null) {
-//				alert("both null");
-				return true;
-			}
-			
+				
+			});
 		}
+		else if ( objType == 'fileId') {
+			$.ajax({
+				url : "renameFileValid",
+				async : false,
+				data : {
+					pid : treeObject.treeData.selectedId,
+					fileId : key,
+					renameInput : renameInput
+				},
+				success : function(rename) {
+					if ( rename == '') {
+						fileManager.renameInput = rename;
+					}						
+					else {
+						fileManager.renameInput = rename;
+						fileManager.renameFile(key, fileManager.renameInput);
+						fileManager.itemsAppend(treeObject.treeData.selectedId);
+					}
+				},
+				error : function() {
+					
+				}
+				
+			});
+		}
+		
+		return fileManager.renameInput;
 	},
 	
 	// 폴더 생성시 유효성 검사
@@ -539,29 +514,31 @@ var fileManager = {
 		
 		// created node
 		var selectedNodeLastChild = selectedNode.getLastChild();
-		/*console.log("last child : " + selectedNodeLastChild);*/
+		/*console.log("first child : " + selectedNodeFirstChild);
+		console.log("last child : " + selectedNodeLastChild);*/
 		
 		while(true) {
 			if ( selectedNodeFirstChild != null ) {
 				
 				// 폴더 하나밖에 없으므로 바로 true
-				if ( selectedNodeLastChild.getIndex() == 0 )
+				if ( selectedNodeLastChild.getIndex() == 0 ) {
 					return true;
+				}
 				
 				if ( title == selectedNodeFirstChild.title) {
 					return false;
 				}
 				else {
-					/*console.log("++");*/
-					 
 					selectedNodeFirstChild = selectedNodeFirstChild.getNextSibling();
-					if ( selectedNodeLastChild == selectedNodeFirstChild)
+					if ( selectedNodeLastChild == selectedNodeFirstChild && selectedNodeLastChild.title != title) {
 						return true;
+					}
 				}
 			}
 			
-			else
+			else {
 				return true;
+			}
 		}
 	},
 	
@@ -683,7 +660,6 @@ var fileManager = {
 				else
 					v = dupFolderName;				
 			}
-			alert(v + ' is duplicated');
 		}
 	},
 	
@@ -715,32 +691,57 @@ var fileManager = {
 				}
 			}
 		}
-		
+
+
+		if ( checkedItem.length == 0 && fileId.length == 0) {
+			
+		}
 		// 파일 하나
-		if ( checkedItem.length == 1 && fileId.length == 1) {		
+		else if ( checkedItem.length == 1 && fileId.length == 1) {		
 			location.href = "downloadOnlyOneFile" + "/" + fileId[0];
 		}
 		
 		// 폴더 하나
 		else if ( checkedItem.length == 1 && folderId.length == 1) {
-	//		location.href = "downloadOnlyOneFolder" + "/" + folderId[0];
-			console.log(folderId[0]);
 			$.ajax({
-				url : "downloadOnlyOneFolder",			
-				data : {
-					folderId : folderId[0]
+				url : "downloadOnlyOneFolder" + "/" + folderId[0],				
+				success : function(map) {
+					var path = "startDownloadOneFolder?zipPath=" + map.zipPath + "&zipName=" + map.zipName
+					location.href = path;
 				},
-				success : function() {
+				error : function() {
+					alert('e');
 				},
-				error : function(a) {
-					alert(a.status);
-				},
+				beforeSend : function() {
+					console.log('loading');
+				}
 			});
 		}
 		
 		// 폴더, 파일 여러개
 		else {
+			var parentFolderTitle = $("#treeItem").fancytree("getActiveNode").title;
+			var parentFolderId = $("#treeItem").fancytree("getActiveNode").key;
 			
+			$.ajax({
+				url : "downloadMultiple",
+				data : {
+					parentFolderId : parentFolderId,
+					parentFolderTitle : parentFolderTitle,
+					folderId : folderId,
+					fileId : fileId
+				},
+				beforeSend : function() {
+					
+				},
+				success : function(map) {
+					var path = "startDownloadMultiple?zipPath=" + map.zipPath + "&zipName=" + map.zipName
+					location.href = path;
+				},
+				error : function(e) {
+					alert(e.status);
+				}
+			});
 		}
 	
 	}

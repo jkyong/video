@@ -398,7 +398,7 @@
                 ajaxFormSubmit(form, ts, pd, fileArray, obj);
 
 		}
-
+		
 
         function serializeAndUploadFiles(s, obj, files) {
             for(var i = 0; i < files.length; i++) {
