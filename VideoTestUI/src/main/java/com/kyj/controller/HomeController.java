@@ -7,7 +7,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import com.kyj.persistence.RE;
+import com.kyj.persistence.StructureDAO;
 
 
 /**
@@ -15,8 +15,7 @@ import com.kyj.persistence.RE;
  */
 @Controller
 public class HomeController {
-	@Autowired
-	RE re;
+	
 	private static final Logger logger = LoggerFactory.getLogger(HomeController.class);
 	
 	/**
@@ -25,7 +24,6 @@ public class HomeController {
 	
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public String login() {
-		re.show();
 		return "login";
 	}
 	

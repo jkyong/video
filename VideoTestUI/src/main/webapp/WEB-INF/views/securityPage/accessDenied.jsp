@@ -4,9 +4,9 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>403 Access Denied Page</title>
+<title>403 Access Denied.</title>
 </head>
 <body>
-	<h1>404 Page not found.</h1>
+	<h1>403 Access Denied.</h1>
 </body>
 </html>

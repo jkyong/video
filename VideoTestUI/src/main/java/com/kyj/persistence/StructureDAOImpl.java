@@ -6,11 +6,11 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.kyj.domain.Structure;
+import com.kyj.domain.StructureForTree;
 
 @Repository
 public class StructureDAOImpl implements StructureDAO{
@@ -28,6 +28,11 @@ public class StructureDAOImpl implements StructureDAO{
 		TypedQuery<Structure> query = em.createQuery("select s from Structure s where s.pid = :id", Structure.class);
 		query.setParameter("id", id);
 		
+		return query.getResultList();
+	}
+	
+	public List<StructureForTree> getAll() {
+		TypedQuery<StructureForTree> query = em.createQuery("select s from StructureForTree s order by s.pid", StructureForTree.class);
 		return query.getResultList();
 	}
 

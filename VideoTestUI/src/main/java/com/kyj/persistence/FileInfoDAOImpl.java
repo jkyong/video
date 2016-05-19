@@ -53,10 +53,8 @@ public class FileInfoDAOImpl implements FileInfoDAO {
 	public void remove(long id) {
 		FileInfo files= em.find(FileInfo.class, id);
 		
-		if ( files != null) {
+		if ( files != null)
 			em.remove(files);
-			System.out.println("               in in");
-		}
 	}
 	
 	@Transactional

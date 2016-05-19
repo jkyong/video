@@ -75,7 +75,6 @@ body {
 </head>
 
 <body>
-<c:out value="${uri}"/>/<c:out value="${external}"/>
 	<div class="container">
 
 		<form class="form-signin" role="form"

@@ -211,39 +211,6 @@
 			$('#removeModal').modal('hide');
 		});
 		
-		$('.test').click(function() {
-			window.open("guest/private");
-		});
-		
-		$('.pass').click(function() {
-			var checkedItem = $('input[name=chkbox]:checked').map(function() {
-				return $(this).data('id');
-			}).get();
-			
-			if ( checkedItem.length == 1) {
-				var split = checkedItem[0].split('_');
-				
-				if ( split[0] == "fileId") {
-					$.ajax({
-						url : "validExtension",
-						data : {
-							id : split[1]
-						},
-						success : function(map) {
-							if ( map.external != undefined) {
-								$("#uri").text('${pageContext.request.contextPath}/guest/private');
-								$("#external").text(map.external);
-								$('#passModal').modal({backdrop : "static"});
-							}
-						},
-						error : function(x) {
-							alert('fail' + x.status);
-						}
-					});
-				}
-			}
-		});
-		
 		$('.testtable').click(function() {
 			var checkedItem = $('input[name=chkbox]:checked').map(function() {
 				return $(this).data('id');
@@ -268,19 +235,11 @@
 								
 								$('.defaultResults').hide();
 								$('.securityResult').hide();
-								/* $('#uriCreate').hide();
-								$('#securityCode').hide();
-								$('#startDate').hide();
-								$('#endDate').hide();*/
 								
 								$('.dropdownBtn').html('private' + ' <span class="caret"></span>');
 								$('.memo').val(''); 
 								
 								$('#externalModal').modal({backdrop : "static"});
-								
-						//		$('.resultDate').hide();
-						//		$('.resultURI').hide();
-						//		$('.resultSecurityCode').hide();
 								
 								external.access = $.trim($('.dropdownBtn').text());
 							}
@@ -359,14 +318,6 @@
 
 		<button type="button" class="btn btn-primary delete">
 			<span class="glyphicon glyphicon-remove"></span> remove
-		</button>
-		
-		<button type="button" class="btn btn-primary test">
-			<span class="glyphicon glyphicon-play-circle"></span> test
-		</button>
-		
-		<button type="button" class="btn btn-primary pass">
-			<span class="glyphicon glyphicon-play-circle"></span> pass
 		</button>
 		
 		<button type="button" class="btn btn-primary testtable">

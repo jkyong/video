@@ -3,7 +3,6 @@ package com.kyj.service;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.HashMap;
 import java.util.List;
 
 import javax.servlet.ServletOutputStream;
@@ -16,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.kyj.domain.Authority;
 import com.kyj.domain.ExternalFile;
 import com.kyj.domain.FileInfo;
 import com.kyj.persistence.ExternalFileDAO;
@@ -82,7 +82,7 @@ public class SecurityViewService {
 			sos.flush();
 
 		} catch (IOException e) {
-			e.printStackTrace();
+			
 		}
 		System.out.println("video ready");
 	}
@@ -94,14 +94,7 @@ public class SecurityViewService {
 			if ( extern.getAccess().equals("private") ) {
 				model.addAttribute("uri", uri);
 				model.addAttribute("external", extern.getExternal());
-			/*	HashMap<String, Object> map = new HashMap<>();
 				
-				map.put("uri", uri);
-				map.put("external", extern.getExternal());
-				
-				rttr.addFlashAttribute("map", map);*/
-				
-	//			return "redirect:/guest/private";
 				return "securityPage/authorityPage";
 			}
 			else if ( extern.getAccess().equals("public")) {
@@ -118,7 +111,38 @@ public class SecurityViewService {
 		return null;
 	}
 	
+	public boolean validVideoFormat(long id) {
+		FileInfo f = fileInfo.find(id);
+		
+		if ( f.getExtension().equals("mp4")) 
+			return true;
+		else 
+			return false;
+	}
+	
+	public String guestUriPost(Authority authority, String uri, SecurityViewService service, Model model) {
+		if ( authority != null) {
+			if ( authority.getPassword() != null) {
+				ExternalFile ex = service.findByExternal(authority.getPassword());
+				
+				if ( ex == null)
+					return "redirect:/guest" + "/" + uri;
+				else {
+					model.addAttribute("uri", uri);
+					model.addAttribute("external", ex.getExternal());
+					
+					return "securityPage/securityView";
+				}
+			}
+			else 
+				return "redirect:/access/denied";			
+		}
+		else
+			return "redirect:/access/denied";
+	}
+	
 	// 초 분 시 일 월 요일 년
+	// 0 0 * * * * * ??????????
 	@Scheduled(cron = "0 17 11 * * ?")
 	public void updateExternal() {
 		List<FileInfo> videoList = fileInfo.selectVideoFormat();

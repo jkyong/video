@@ -4,11 +4,14 @@ import java.util.List;
 
 import com.kyj.domain.FileInfo;
 import com.kyj.domain.Structure;
+import com.kyj.domain.StructureForTree;
 
 public interface StructureDAO {
 	public List<Structure> findAll();
 	
 	public List<Structure> findChildren(long id);
+	
+	public List<StructureForTree> getAll();
 	
 	public long save(String title, long pid);	
 	
@@ -19,5 +22,6 @@ public interface StructureDAO {
 	public void move(long id, long moveId);
 	
 	public Structure find(long id);
+	
 	
 }

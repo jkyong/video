@@ -3,10 +3,11 @@ package com.kyj.tree;
 import java.util.List;
 
 import com.kyj.domain.Structure;
+import com.kyj.domain.StructureForTree;
 
 public class Recursion {
 	
-	public void addItem(List<Structure> result, List<Structure> dataList, int index) {
+	public void addItem(List<StructureForTree> result, List<StructureForTree> dataList, int index) {
 		for (int i = 0; i < result.size(); i++) {
 			try {
 				long resultId = result.get(i).getKey();
@@ -17,7 +18,7 @@ public class Recursion {
 //				boolean dataListFolder = dataList.get(index).getFolder();
 
 				if (resultId == dataListPid) {
-					Structure data = new Structure();
+					StructureForTree data = new StructureForTree();
 					data.setKey(dataListId);
 					data.setTitle(dataListTitle);
 					data.setPid(dataListPid);
@@ -39,7 +40,7 @@ public class Recursion {
 
 	}
 
-	public List<Structure> addRootTree(List<Structure> result, List<Structure> dataList) {
+	public List<StructureForTree> addRootTree(List<StructureForTree> result, List<StructureForTree> dataList) {
 
 		for (int i = 0; i < dataList.size(); i++) {
 			long id = dataList.get(i).getKey();			
@@ -50,7 +51,7 @@ public class Recursion {
 			
 			// root
 			if (pid == 0) {
-				Structure data = new Structure();
+				StructureForTree data = new StructureForTree();
 				data.setKey(id);
 				data.setTitle(title);
 				data.setPid(pid);
