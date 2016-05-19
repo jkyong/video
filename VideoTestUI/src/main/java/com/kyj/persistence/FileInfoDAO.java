@@ -18,4 +18,8 @@ public interface FileInfoDAO {
 	public FileInfo find(long id);
 	
 	public List<FileInfo> findAll();
+	
+	public FileInfo selectExternal(String external);
+	
+	public List<FileInfo> selectVideoFormat();
 }

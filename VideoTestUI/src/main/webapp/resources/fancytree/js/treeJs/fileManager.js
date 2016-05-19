@@ -70,7 +70,6 @@ var fileManager = {
 							var itemTitle = data[i].title;
 							var itemKey = data[i].key;
 							var appendDataId = 'folderId' + '_' + itemKey;
-							
 							$.ajax({
 								url : "fileItem",
 								type : "GET",
@@ -92,7 +91,7 @@ var fileManager = {
 										$(".type_thumb").append($li);
 								}
 							});
-						})
+						});
 					}
 					else {
 						$("._item").remove();
@@ -163,14 +162,14 @@ var fileManager = {
 											$li.find("._file_icon").addClass('bu_mov_b');
 											$li.find("span._file_icon_span").html(upperExtension);
 	
-											if (i == 0) {
+					//						if (i == 0) {
 										//		$("._item").remove();
 												$(".type_thumb").append($li);
-											} else
-												$(".type_thumb").append($li);
+								//			} else
+								//				$(".type_thumb").append($li);
 										},
 									});
-								})
+								});
 							}
 							else {
 							//	$("._item").remove();
@@ -321,7 +320,7 @@ var fileManager = {
 					return value != files;
 				});
 				console.log('success : ' + fileManager.uploadedName);
-				fileManager.itemsAppend(treeObject.treeData.selectedId);
+//				fileManager.itemsAppend(treeObject.treeData.selectedId);
 			},
 			onError: function(files,status,errMsg,pd)
 			{
@@ -358,6 +357,7 @@ var fileManager = {
 				$('.uploadCancel').prop('disabled', false);
 				$('.startUpload').prop('disabled', false);
 				
+				fileManager.itemsAppend(treeObject.treeData.selectedId);
 			},
 		});
 		

@@ -1,5 +1,8 @@
 package com.kyj.domain;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -9,12 +12,15 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.Size;
 
 import org.hibernate.validator.constraints.Length;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name = "fileinfo")
@@ -38,10 +44,14 @@ public class FileInfo {
 	@Length(max = 5)
 	private String extension;
 	
-	@ManyToOne(cascade = CascadeType.PERSIST, optional = false)
+	@ManyToOne(cascade = CascadeType.PERSIST, optional = false, fetch = FetchType.EAGER)
 	@JoinColumn(name = "structure_id", nullable = false)
 	private Structure structure;
 
+	@JsonIgnore
+	@OneToMany(mappedBy = "fileInfo", fetch = FetchType.LAZY, cascade = { CascadeType.REMOVE, CascadeType.PERSIST }, orphanRemoval = true)
+	private List<ExternalFile> externalFiles = new ArrayList<>();
+	
 	public long getId() {
 		return id;
 	}
@@ -96,8 +106,14 @@ public class FileInfo {
 
 	public void setStructure(Structure structure) {
 		this.structure = structure;
+	}
+
+	public List<ExternalFile> getExternalFiles() {
+		return externalFiles;
+	}
+
+	public void setExternalFiles(List<ExternalFile> externalFiles) {
+		this.externalFiles = externalFiles;
 	}	
-	
-	
 	
 }

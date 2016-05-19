@@ -1,9 +1,11 @@
 package com.kyj.persistence;
 
 import java.util.List;
+import java.util.UUID;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.PersistenceContextType;
 import javax.persistence.TypedQuery;
 
 import org.springframework.stereotype.Repository;
@@ -30,6 +32,18 @@ public class FileInfoDAOImpl implements FileInfoDAO {
 		fileInfo.setExtension(extension);
 		fileInfo.setStructure(structure);
 		
+	/*	if ( extension == "mp4") {
+			String externalUuid = UUID.randomUUID().toString();
+			String external = "";
+			String[] split = external.split("-");
+			
+			// 12자리
+			for ( int i =0; i < 2; i++) {
+				external = external + split[i];
+			}
+			fileInfo.setExternal(external);
+		}*/
+		
 		em.persist(fileInfo);
 		
 		return fileInfo.getId();
@@ -39,8 +53,10 @@ public class FileInfoDAOImpl implements FileInfoDAO {
 	public void remove(long id) {
 		FileInfo files= em.find(FileInfo.class, id);
 		
-		if ( files != null)
+		if ( files != null) {
 			em.remove(files);
+			System.out.println("               in in");
+		}
 	}
 	
 	@Transactional
@@ -75,6 +91,30 @@ public class FileInfoDAOImpl implements FileInfoDAO {
 		TypedQuery<FileInfo> query = em.createQuery("select f from FileInfo f", FileInfo.class);
 		
 		return query.getResultList();
+	}
+	
+	public FileInfo selectExternal(String external) {
+		TypedQuery<FileInfo> query = em.createQuery("select f from FileInfo f where f.external = :external", FileInfo.class);
+		query.setParameter("external", external);
+		
+		List<FileInfo> result = query.getResultList();
+		
+		if ( result.isEmpty())
+			return null;
+		else
+			return result.get(0);
+	}
+	
+	public List<FileInfo> selectVideoFormat() {
+		TypedQuery<FileInfo> query = em.createQuery("select f from FileInfo f where f.extension = :extension", FileInfo.class);
+		query.setParameter("extension", "mp4");
+		
+		List<FileInfo> result = query.getResultList();
+		
+		if ( result.isEmpty())
+			return null;
+		else
+			return result;
 	}
 
 }

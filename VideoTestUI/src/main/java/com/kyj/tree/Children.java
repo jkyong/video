@@ -24,7 +24,7 @@ public class Children {
 		return null;
 	}
 
-	public List<Structure> getChildrenTitle(List<Structure> dataList, long selectedId) {
+/*	public List<Structure> getChildrenTitle(List<Structure> dataList, long selectedId) {
 		List<Structure> childrenList = new ArrayList<>();
 		
 		for ( int i =0; i < dataList.size(); i++) {
@@ -36,5 +36,5 @@ public class Children {
 		}
 		
 		return null;
-	}
+	}*/
 }

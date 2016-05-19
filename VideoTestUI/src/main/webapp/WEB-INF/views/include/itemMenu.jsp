@@ -13,10 +13,14 @@
 <script
 	src="${pageContext.request.contextPath }/resources/fancytree/js/treeJs/selectFile.js"></script>
 	
+<script
+	src="${pageContext.request.contextPath }/resources/fancytree/js/treeJs/external.js"></script>
+	
 <script src="${pageContext.request.contextPath }/resources/bootstrap/js/modal.js"></script>
 <link
 	href="${pagecontext.request.contextPath }/resources/bootstrap/css/bootstrap-theme.min.css"
 	rel="stylesheet">
+<jsp:include page="../modal/itemMenuModal.jsp"></jsp:include>
 <script>
 	$(document).ready(function() {
 		$('#moveTree').fancytree({
@@ -130,23 +134,6 @@
 				else if ( result != renameInput){
 					$('#whiteSpaceRename').slideUp('fast');
 					$('#alreadyNameRename').slideDown('fast');
-					
-					/* if ( $('#alreadyNameRename').hasClass('alert-danger')) {
-						$('#alreadyNameRename').addClass('alert-warning');
-						$('#alreadyNameRename').removeClass('alert-danger');
-					}
-					else if ( $('#alreadyNameRename').hasClass('alert-warning')) {
-						$('#alreadyNameRename').addClass('alert-info');
-						$('#alreadyNameRename').removeClass('alert-warning');
-					}
-					else if ( $('#alreadyNameRename').hasClass('alert-info')) {
-						$('#alreadyNameRename').addClass('alert-success');
-						$('#alreadyNameRename').removeClass('alert-info');
-					}
-					else if ( $('#alreadyNameRename').hasClass('alert-success')) {
-						$('#alreadyNameRename').addClass('alert-danger');
-						$('#alreadyNameRename').removeClass('alert-success');
-					} */
 				}
 				
 			}
@@ -224,6 +211,121 @@
 			$('#removeModal').modal('hide');
 		});
 		
+		$('.test').click(function() {
+			window.open("guest/private");
+		});
+		
+		$('.pass').click(function() {
+			var checkedItem = $('input[name=chkbox]:checked').map(function() {
+				return $(this).data('id');
+			}).get();
+			
+			if ( checkedItem.length == 1) {
+				var split = checkedItem[0].split('_');
+				
+				if ( split[0] == "fileId") {
+					$.ajax({
+						url : "validExtension",
+						data : {
+							id : split[1]
+						},
+						success : function(map) {
+							if ( map.external != undefined) {
+								$("#uri").text('${pageContext.request.contextPath}/guest/private');
+								$("#external").text(map.external);
+								$('#passModal').modal({backdrop : "static"});
+							}
+						},
+						error : function(x) {
+							alert('fail' + x.status);
+						}
+					});
+				}
+			}
+		});
+		
+		$('.testtable').click(function() {
+			var checkedItem = $('input[name=chkbox]:checked').map(function() {
+				return $(this).data('id');
+			}).get();
+			
+			if ( checkedItem.length == 1) {
+				var split = checkedItem[0].split('_');
+				
+				if ( split[0] == "fileId") {
+					$.ajax({
+						url : "validExtension",
+						data : {
+							id : split[1]
+						},
+						success : function(bool) {
+							if ( bool == true) {
+								
+								if ( $('.externalCreate').hasClass('disabled')) {
+									$('.externalCreate').removeClass('disabled');
+									$('.externalCreate').prop('disabled', false);
+								}
+								
+								$('.defaultResults').hide();
+								$('.securityResult').hide();
+								/* $('#uriCreate').hide();
+								$('#securityCode').hide();
+								$('#startDate').hide();
+								$('#endDate').hide();*/
+								
+								$('.dropdownBtn').html('private' + ' <span class="caret"></span>');
+								$('.memo').val(''); 
+								
+								$('#externalModal').modal({backdrop : "static"});
+								
+						//		$('.resultDate').hide();
+						//		$('.resultURI').hide();
+						//		$('.resultSecurityCode').hide();
+								
+								external.access = $.trim($('.dropdownBtn').text());
+							}
+						},
+						error : function(x) {
+							alert('fail' + x.status);
+						}
+					});
+				}
+			}
+		});
+		
+		$('.externalCreate').click(function() {
+			if ( external.access === 'private' || external.access === 'public') {
+				var checkedItem = $('input[name=chkbox]:checked').map(function() {
+					return $(this).data('id');
+				}).get();
+				
+				var split = checkedItem[0].split('_');
+				var fileId = split[1];
+			
+				$('.externalCreate').addClass('disabled');
+				$('.externalCreate').prop('disabled', true);
+				
+				var access = external.access;
+				var startDate = external.getStartDate();
+				var endDate = new Date(startDate.getTime());
+	
+				endDate.setDate(startDate.getDate() + 1);
+				endDate.setMinutes(0);
+				
+				var memo = $('.memo').val();
+				
+				$('#startDate').text(external.getDateString(startDate));
+				$('#endDate').text(external.getDateString(endDate));
+				
+				external.save(access, startDate, endDate, memo, fileId);
+			}
+		});
+		
+		$('.dropdown-menu li a').click(function() {
+			$(".dropdownBtn:first-child").html($(this).text() + ' <span class="caret"></span>');
+			external.access = $(this).text();
+		});
+		
 	});
 </script>
 
@@ -258,133 +360,17 @@
 		<button type="button" class="btn btn-primary delete">
 			<span class="glyphicon glyphicon-remove"></span> remove
 		</button>
-	</div>
-	
-	
-</div>
-
-<!-- new folder modal  -->
-<div class="modal fade" id="newFolderModal" tabindex="-1" role="dialog"
-	aria-labelledby="exampleModalLabel" aria-hidden="true">
-	<div class="modal-dialog modal-sm">
-		<div class="modal-content">
-			<div class="modal-header">
-				<button type="button" class="close" data-dismiss="modal"
-					aria-label="Close">
-					<span aria-hidden="true">&times;</span>
-				</button>
-				<h4 class="modal-title" id="exampleModalLabel">New Folder</h4>
-			</div>
-			<div class="modal-body">
-				<div id="alreadyNameFolder" class="alert alert-danger" style="display: none;">
-  					<strong> folder name already exists. </strong>
-				</div>
-				<div id="whiteSpaceFolder" class="alert alert-danger" style="display: none;">
-  					<strong> please input the folder name. </strong>
-				</div>
-				<form id="newFolderForm">
-					<input type="text" class="form-control newFolderInput" placeholder="input the new folder name.">
-				</form>
-			</div>
-			<div class="modal-footer">
-				<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-				<button type="button" class="btn btn-primary createNewFolder">Create</button>
-			</div>
-		</div>
-	</div>
-</div>
-
-<!-- rename modal  -->
-<div class="modal fade" id="renameModal" tabindex="-1" role="dialog"
-	aria-labelledby="exampleModalLabel" aria-hidden="true">
-	<div class="modal-dialog modal-sm">
-		<div class="modal-content">
-			<div class="modal-header">
-				<button type="button" class="close" data-dismiss="modal"
-					aria-label="Close">
-					<span aria-hidden="true">&times;</span>
-				</button>
-				<h4 class="modal-title" id="exampleModalLabel">Rename</h4>
-			</div>
-			<div class="modal-body">
-				<div id="alreadyNameRename" class="alert alert-danger" style="display: none;">
-  					<strong> file name already exists. </strong>
-				</div>
-				<div id="whiteSpaceRename" class="alert alert-danger" style="display: none;">
-  					<strong> please input the file name. </strong>
-				</div>
-				<form id="renameForm">
-					<input type="text" class="form-control renameInput" placeholder="rename the file name.">
-				</form>
-			</div>
-			<div class="modal-footer">
-				<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-				<button type="button" class="btn btn-primary nameChange">Change</button>
-			</div>
-		</div>
-	</div>
-</div>
-
-<!-- move modal -->
-<div class="modal fade" id="moveModal" tabindex="-1" role="dialog"
-	aria-labelledby="exampleModalLabel" aria-hidden="true">
-	<div class="modal-dialog">
-		<div class="modal-content">
-			<div class="modal-header">
-				<button type="button" class="close" data-dismiss="modal"
-					aria-label="Close">
-					<span aria-hidden="true">&times;</span>
-				</button>
-				<h4 class="modal-title" id="exampleModalLabel">Directory Move</h4>
-			</div>
-			<div class="modal-body">
-				<div id="moveTree"></div>
-			</div>
-			<div class="modal-footer">
-				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-				<button type="button" class="btn btn-primary moveModalMove">Move</button>
-			</div>
-		</div>
-	</div>
-</div>
-
-<!-- upload modal -->
-<div class="modal fade" id="uploadModal" role="dialog">
-	<div class="modal-dialog modal-md">
-		<div class="modal-content">			
-			<div class="modal-header">
-				<h4 class="modal-title" id="exampleModalLabel">Upload</h4>
-			</div>
-			<div class="modal-body" > 
-				<div id="fileuploader">Select</div>
-			</div> 
-			<div class="modal-footer">
-				<button type="button" class="btn btn-default uploadCancel" data-dismiss="modal">Cancel</button>
-				<button id="extrabutton" type="button" class="btn btn-success startUpload">Start Upload</button>
-			</div>
-		</div>
-	</div>
-</div>
-
-<!-- remove modal  -->
-<div class="modal fade" id="removeModal" tabindex="-1" role="dialog"
-	aria-labelledby="exampleModalLabel" aria-hidden="true">
-	<div class="modal-dialog modal-sm">
-		<div class="modal-content">
-			<div class="modal-header">
-				<button type="button" class="close" data-dismiss="modal"
-					aria-label="Close">
-					<span aria-hidden="true">&times;</span>
-				</button>
-				<h4 class="modal-title" id="exampleModalLabel">Remove</h4>
-			</div>
-			<div class="modal-body"> 
-  				Are you sure you want to remove?
-			</div>
-			<div class="modal-footer">
-				<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-				<button type="button" class="btn btn-danger removeRemove">Remove</button>
-			</div>
-		</div>
+		
+		<button type="button" class="btn btn-primary test">
+			<span class="glyphicon glyphicon-play-circle"></span> test
+		</button>
+		
+		<button type="button" class="btn btn-primary pass">
+			<span class="glyphicon glyphicon-play-circle"></span> pass
+		</button>
+		
+		<button type="button" class="btn btn-primary testtable">
+			<span class="glyphicon glyphicon-play-circle"></span> table
+		</button>
 	</div>
 </div>

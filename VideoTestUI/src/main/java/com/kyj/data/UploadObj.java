@@ -2,6 +2,7 @@ package com.kyj.data;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.util.Calendar;
 
 import org.springframework.util.FileCopyUtils;
@@ -42,6 +43,13 @@ public class UploadObj {
 		
 		String nameOnly = fileName.substring(0, fileName.length() - extension.length() - 1);
 		
+		try {
+			nameOnly = new String(nameOnly.getBytes("8859_1"), "UTF-8");
+		} catch (UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 		return nameOnly;
 	}
 	
@@ -57,6 +65,8 @@ public class UploadObj {
 				System.out.println("alreay");
 			}
 		}
+		
+		originalName = new String(originalName.getBytes("8859_1"), "UTF-8");
 		
 	    String savedName = id + "_" + originalName;
 

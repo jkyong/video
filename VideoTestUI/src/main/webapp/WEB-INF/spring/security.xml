@@ -27,4 +27,5 @@
 				users-by-username-query="select email, password, enabled from user where email = ?" />
 		</authentication-provider>
 	</authentication-manager>
+	
 </beans:beans>
