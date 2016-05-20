@@ -52,9 +52,12 @@ public class FileInfoDAOImpl implements FileInfoDAO {
 	@Transactional
 	public void remove(long id) {
 		FileInfo files= em.find(FileInfo.class, id);
+		List<FileInfo> fileInfo = files.getStructure().getFileInfo();
 		
-		if ( files != null)
-			em.remove(files);
+		for ( int i = 0; i < fileInfo.size(); i++) {
+			if ( fileInfo.get(i).getName().equals(files.getName()))
+				fileInfo.remove(i);
+		}
 	}
 	
 	@Transactional
@@ -66,7 +69,7 @@ public class FileInfoDAOImpl implements FileInfoDAO {
 		fileInfo.setStructure(structure);
 	}
 	
-	
+	@Transactional
 	public List<FileInfo> partialSelect(long structure_id) {
 		Structure structure = em.find(Structure.class, structure_id);
 		

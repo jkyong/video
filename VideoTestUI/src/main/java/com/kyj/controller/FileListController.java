@@ -14,7 +14,6 @@ import com.kyj.domain.FileInfo;
 import com.kyj.domain.Structure;
 import com.kyj.persistence.StructureDAO;
 import com.kyj.repository.StructureRepository;
-import com.kyj.tree.Children;
 
 @Controller
 public class FileListController {
@@ -22,31 +21,11 @@ public class FileListController {
 	@Autowired
 	private StructureDAO structure;
 	
-//	private Children children;
-	
 	@Autowired
 	private StructureRepository structureRepository; 
 	
 	@RequestMapping(value = "/fileList", method = RequestMethod.GET)
 	public @ResponseBody List<Structure> fileList(@RequestParam("id") long id) {
-		/*List<Structure> structureList = structure.findAll();
-		List<Structure> childrenList = new ArrayList<>();
-		Structure st = structure.find(id);
-		
-		
-		
-		long selectedId = id;
-		
-		children = new Children();
-		
-		System.out.println("selectedId : " + selectedId);
-		
-		System.out.println("structureList size : " + structureList.size());
-		System.out.println("selected children : " + children.getChildrenObj(structureList, selectedId).size());
-		
-		childrenList = children.getChildrenObj(structureList, selectedId);*/
-		
-//		return childrenList;
 		return structureRepository.findByPid(id); 
 	}
 	

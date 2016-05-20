@@ -1,10 +1,13 @@
-package com.kyj.data;
+package com.kyj.service;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.kyj.domain.FileInfo;
@@ -12,8 +15,17 @@ import com.kyj.domain.Structure;
 import com.kyj.persistence.FileInfoDAO;
 import com.kyj.persistence.StructureDAO;
 
-public class FileManager {
-	public String renameFolderValid(List<Structure> children, String renameInput) {
+@Service
+public class FileManagerService {
+	@Autowired
+	private StructureDAO structureDAO;
+	
+	@Autowired
+	private FileInfoDAO fileInfoDAO;
+	
+	public String renameFolderValid(long pid, long folderId, String renameInput) {
+		List<Structure> children = structureDAO.findChildren(pid);
+		
 		String title = renameInput;
 		String validTitle;
 		
@@ -28,7 +40,13 @@ public class FileManager {
 		return title;
 	}
 	
-	public String renameFileValid(List<FileInfo> children, String renameInput) {
+	public void renameFolder(long folderId, String title) {
+		structureDAO.update(folderId, title);
+	}
+	
+	public String renameFileValid(long pid, long fileId, String renameInput) {
+		List<FileInfo> children = fileInfoDAO.partialSelect(pid);
+		
 		String name = renameInput;
 		String validTitle;
 		
@@ -43,11 +61,15 @@ public class FileManager {
 		return name;
 	}
 	
+	public void renameFile(long fileId, String name) {
+		fileInfoDAO.update(fileId, name);
+	}
+	
 	@Transactional
-	public void remove(StructureDAO structure, FileInfoDAO fileInfo, long[] folderIds, long[] fileIds, String uploadDefaultPath) {
+	public void remove(long[] folderIds, long[] fileIds, String uploadDefaultPath) {
 		if ( fileIds != null) {
 			for ( int i =0; i < fileIds.length; i++) {
-				FileInfo removeFile = fileInfo.find(fileIds[i]);
+				FileInfo removeFile = fileInfoDAO.find(fileIds[i]);
 				StringBuffer fullPath = new StringBuffer();
 				
 				try {
@@ -73,11 +95,13 @@ public class FileManager {
 					File file = new File(fullPath.toString());
 					if (file.delete()) {
 						System.out.println(fullPath + " is deleted.");
-						fileInfo.remove(fileIds[i]);
+						fileInfoDAO.remove(fileIds[i]);
 					}
 					else {
 						System.out.println(fullPath);
 						System.out.println("file delete fail.");
+						fileInfoDAO.remove(fileIds[i]);
+
 					}
 					
 				} catch (Exception e) {
@@ -92,11 +116,11 @@ public class FileManager {
 			List<Structure> strChild = new ArrayList<>();
 			List<FileInfo> fileInfos = new ArrayList<>();
 			for ( int i =0; i < folderIds.length; i++) {
-				strChild = structure.findChildren(folderIds[i]);
+				strChild = structureDAO.findChildren(folderIds[i]);
 //				fileInfos = structure.find(folderIds[i]).getFileInfo();
 //				fileInfos = structure.remove(folderIds[i]);
-				if ( structure.find(folderIds[i]) != null) {
-					fileInfos = structure.find(folderIds[i]).getFileInfo();
+				if ( structureDAO.find(folderIds[i]) != null) {
+					fileInfos = structureDAO.find(folderIds[i]).getFileInfo();
 				}
 				
 				if ( fileInfos != null) {
@@ -126,7 +150,7 @@ public class FileManager {
 							File file = new File(fullPath.toString());
 							if ( file.delete()) {
 								System.out.println(fullPath + " is deleted.");
-								fileInfo.remove(fileInfos.get(k).getId());
+								fileInfoDAO.remove(fileInfos.get(k).getId());
 							}
 							else {
 								System.out.println("file delete fail.");
@@ -142,11 +166,47 @@ public class FileManager {
 					for ( int j =0; j < strChild.size(); j++)
 						newFolderIds[j] = strChild.get(j).getKey();
 					if ( newFolderIds.length != 0)
-						remove(structure, fileInfo, newFolderIds, fileIds, uploadDefaultPath);
+						remove(newFolderIds, fileIds, uploadDefaultPath);
 				}
 
-				structure.remove(folderIds[i]);
+				structureDAO.remove(folderIds[i]);
 			}
 		}
+	}
+	
+	public List<Structure> moveFolderNameValid(long id) {
+		List<Structure> folders = structureDAO.findChildren(id);
+		
+		return folders;
+	}
+	
+	@Transactional
+	public List<FileInfo> moveFileNameValid(long id) {
+		Structure structure = structureDAO.find(id);
+		List<FileInfo> files = structure.getFileInfo();
+		
+		return files;
+	}
+	
+	public void move(long[] folderId, long[] fileId, long moveId) {
+		if (folderId != null) {
+			for (int i = 0; i < folderId.length; i++) {
+				structureDAO.move(folderId[i], moveId);
+			}
+		}
+		if (fileId != null) {
+			for (int k = 0; k < fileId.length; k++) {
+				fileInfoDAO.move(fileId[k], moveId);
+			}
+		}
+	}
+	
+	public HashMap<String, Object> folderCreate(String title, long pid) {
+		HashMap<String, Object> map = new HashMap<>(); 
+		
+		long saveKey = structureDAO.save(title, pid);
+		map.put("id", saveKey);
+		
+		return map;
 	}
 }

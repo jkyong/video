@@ -23,5 +23,6 @@ public interface StructureDAO {
 	
 	public Structure find(long id);
 	
+	public List<Structure> findByPid(long id);
 	
 }

@@ -44,16 +44,14 @@ public class SecurityViewService {
 		System.out.println("play video external : " + external);
 		
 		// public
-		if ( external.equals("null")) {
+		if ( external.equals("null"))
 			exFile = externalFile.findByUri(uri);
-		}
-		// private
-		else {
-			exFile = externalFile.findByExternal(external);
-			System.out.println("in");
-		}
 		
-		System.out.println(exFile);
+		// private
+		else
+			exFile = externalFile.findByExternal(external);
+		
+		
 //		ExternalFile exFile = externalFile.findByExternal(external);
 		FileInfo parentFile = exFile.getFileInfo();
 		

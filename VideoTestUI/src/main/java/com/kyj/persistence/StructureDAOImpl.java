@@ -6,17 +6,22 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.kyj.domain.Structure;
 import com.kyj.domain.StructureForTree;
+import com.kyj.repository.StructureRepository;
 
 @Repository
 public class StructureDAOImpl implements StructureDAO{
 
 	@PersistenceContext
 	private EntityManager em;
+	
+	@Autowired
+	private StructureRepository structureRepository;
 	
 	@Override
 	public List<Structure> findAll() {
@@ -74,6 +79,12 @@ public class StructureDAOImpl implements StructureDAO{
 		Structure structure = em.find(Structure.class, id);
 		
 		return structure;
+	}
+
+	@Override
+	public List<Structure> findByPid(long id) {
+		
+		return structureRepository.findByPid(id);
 	}
 	
 }

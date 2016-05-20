@@ -291,7 +291,7 @@ var fileManager = {
 				// files 와 fileManager.uploadedName 비교해서 같은게 있으면 alert 없으면 push
 				for ( var i = 0; i < files.length; i++) {
 					if ( fileManager.uploadedName == files[i].name) {
-						alert(files[i] );
+	//					alert(files[i] );
 						break;
 					}
 					else {
@@ -361,7 +361,7 @@ var fileManager = {
 			},
 		});
 		
-		$("#extrabutton").on('click', function() {		
+		$("#extrabutton").off('click').on('click', function() {		
 			
 			if ( fileManager.uploadedName.length > 0) {
 				$('.uploadCancel').addClass('disabled');
@@ -401,6 +401,13 @@ var fileManager = {
 			}
 			
 		});
+		
+		$('.uploadCancel').click(function() {
+			fileManager.uploadedName = [];
+		});
+	
+		
+		
 	},
 	
 	// 폴더명 바꾸기 
@@ -436,7 +443,10 @@ var fileManager = {
 				name : renameFile
 			},
 			success : function() {
-			
+				var $tree = $('#treeItem').fancytree('getTree');
+				$tree.reload().done(function(){
+					$tree.getNodeByKey(treeObject.treeData.selectedId).setActive();
+		        });
 			},
 			error : function(x) {
 				console.log(x.status + "rename error");
@@ -468,8 +478,6 @@ var fileManager = {
 					else {
 						fileManager.renameInput = rename;
 						fileManager.renameFolder(key, fileManager.renameInput);
-						fileManager.itemsAppend(treeObject.treeData.selectedId);
-						
 					}
 				},
 				error : function(e) {
@@ -494,7 +502,6 @@ var fileManager = {
 					else {
 						fileManager.renameInput = rename;
 						fileManager.renameFile(key, fileManager.renameInput);
-						fileManager.itemsAppend(treeObject.treeData.selectedId);
 					}
 				},
 				error : function() {
@@ -588,8 +595,13 @@ var fileManager = {
 									folderName.splice(k, 1);
 									folderId.splice(k, 1);
 								}
+								else
+									alert('folder not');
 							}
 						}
+					}
+					else {
+						alert('folder length 0')
 					}
 				},
 				error : function() {
@@ -615,9 +627,13 @@ var fileManager = {
 									fileName.splice(k, 1);
 									fileId.splice(k, 1);
 								}
+								else
+									alert('file not');
 							}
 						}
 					}
+					else
+						alert('file length 0');
 				},
 				error : function() {
 					
@@ -709,8 +725,8 @@ var fileManager = {
 					var path = "startDownloadOneFolder?zipPath=" + map.zipPath + "&zipName=" + map.zipName
 					location.href = path;
 				},
-				error : function() {
-					alert('e');
+				error : function(e) {
+					alert('e' + e.status);
 				},
 				beforeSend : function() {
 					console.log('loading');

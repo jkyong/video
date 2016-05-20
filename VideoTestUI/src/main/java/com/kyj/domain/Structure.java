@@ -34,7 +34,7 @@ public class Structure {
 	private boolean folder;
 	
 	@JsonIgnore
-	@OneToMany(mappedBy = "structure", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "structure", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<FileInfo> fileInfo = new ArrayList<>();
 
 	public long getKey() {

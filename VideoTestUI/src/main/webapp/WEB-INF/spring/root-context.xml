@@ -53,5 +53,7 @@
 	<import resource="security.xml"/>
 	
 	<import resource="task.xml" />
+	
+	<import resource="bean.xml" />
 
 </beans>

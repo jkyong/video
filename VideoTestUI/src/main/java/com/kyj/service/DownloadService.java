@@ -1,8 +1,7 @@
-package com.kyj.data;
+package com.kyj.service;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -20,35 +19,29 @@ import java.util.zip.ZipOutputStream;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.kyj.domain.FileInfo;
 import com.kyj.domain.Structure;
-import com.kyj.tree.Children;
+import com.kyj.persistence.FileInfoDAO;
+import com.kyj.persistence.StructureDAO;
 
-public class DownloadObj {
+@Service
+public class DownloadService {
 
 	final static String CREATE_ZIP_PATH = "C:/zzz/download";
 
 	final static String TEMP_FILES = "C:/zzz/temp_files";
-
-	private List<HashMap<Object, Object>> mapList;
-
-	private List<String> fullPathList;
-
-	public DownloadObj() {
-	}
-
-	public DownloadObj(List<HashMap<Object, Object>> mapList, List<String> fullPathList) {
-		this.mapList = mapList;
-		this.fullPathList = fullPathList;
-	}
-
-	public List<HashMap<Object, Object>> getMapList() {
-		return mapList;
-	}
-
-	public List<String> getFullPathList() {
-		return fullPathList;
-	}
+	
+	@Autowired
+	private StructureDAO structureDAO;
+	
+	@Autowired
+	private FileInfoDAO fileInfoDAO;
 
 	public String createDumpDir(List<String> fullPathList, String authName, String folderName, String parentFolderTitle) {
 		String upperPath = null;
@@ -109,7 +102,7 @@ public class DownloadObj {
 
 	public String createZip(String dumpDirPath, String authName, String folderName, HttpServletResponse response) {
 		List<String> fileList = new ArrayList<>();
-		DownloadObj down = new DownloadObj();
+		DownloadService down = new DownloadService();
 		
 		UUID uuid = UUID.randomUUID();
 		
@@ -198,18 +191,20 @@ public class DownloadObj {
 		return upperDumpCopyPath;
 	}
 
-	public void fileCopy(List<HashMap<Object, Object>> mapList, List<FileInfo> fileInfoAll, String authName, Structure folderObj, List<FileInfo> downFiles, String parentFolderTitle) {
+	@Transactional
+	public void fileCopy(List<HashMap<Object, Object>> mapList, String authName, Structure folderObj,
+			List<FileInfo> downFiles, String parentFolderTitle) {
 		String id = null;
 		String path = null;
 
 		String dumpCopyPath = null;
-		
-		if ( parentFolderTitle == "")
+
+		if (parentFolderTitle == "")
 			dumpCopyPath = TEMP_FILES + "/" + authName + "/";
 		else {
 			dumpCopyPath = TEMP_FILES + "/" + authName + "/" + parentFolderTitle + "/";
-			
-			if ( downFiles != null) {
+
+			if (downFiles != null) {
 				for (int i = 0; i < downFiles.size(); i++) {
 					String realPath = downFiles.get(i).getPath();
 					long realId = downFiles.get(i).getId();
@@ -232,36 +227,32 @@ public class DownloadObj {
 				}
 			}
 		}
-		
+
 		long folderId = folderObj.getKey();
-		
-		// 최상위 파일이 있으면 넣기
-		for ( int j = 0; j < fileInfoAll.size(); j++) {
-			long structureId = fileInfoAll.get(j).getStructure().getKey();
-			if ( folderId == structureId) {
-				String realPath = fileInfoAll.get(j).getPath();
-				long realId = fileInfoAll.get(j).getId();
-				String name = fileInfoAll.get(j).getName();
-				String extension = fileInfoAll.get(j).getExtension();
 
-				if (folderId == structureId) {
-					String sourcePath = realPath + "/" + realId + "_" + name + "." + extension;
-					String destinationPath = dumpCopyPath + folderObj.getTitle() + "/" + name + "." + extension;
-					System.out.println("s : " + sourcePath);
-					System.out.println("d : " + destinationPath);
-					Path source = Paths.get(sourcePath);
-					Path destination = Paths.get(destinationPath);
+		List<FileInfo> fileInfo = structureDAO.find(folderId).getFileInfo();
 
-					try {
-						Files.copy(source, destination);
-					} catch (Exception e) {
+		for (int i = 0; i < fileInfo.size(); i++) {
+			String realPath = fileInfo.get(i).getPath();
+			long realId = fileInfo.get(i).getId();
+			String name = fileInfo.get(i).getName();
+			String extension = fileInfo.get(i).getExtension();
 
-					}
+			String sourcePath = realPath + "/" + realId + "_" + name + "." + extension;
+			String destinationPath = dumpCopyPath + folderObj.getTitle() + "/" + name + "." + extension;
+			System.out.println("s : " + sourcePath);
+			System.out.println("d : " + destinationPath);
+			Path source = Paths.get(sourcePath);
+			Path destination = Paths.get(destinationPath);
 
-				}
+			try {
+				Files.copy(source, destination);
+			} catch (Exception e) {
+
 			}
+
 		}
-		
+
 		for (int i = 0; i < mapList.size(); i++) {
 
 			for (Map.Entry<Object, Object> map : mapList.get(i).entrySet()) {
@@ -269,59 +260,58 @@ public class DownloadObj {
 				path = new String(map.getValue() + "");
 			}
 
-			for (int k = 0; k < fileInfoAll.size(); k++) {
-				long structureId = Long.parseLong(id);
-				long fileInfoStrId = fileInfoAll.get(k).getStructure().getKey();
+			List<FileInfo> fileInfos = structureDAO.find(Long.parseLong(id)).getFileInfo();
 
-				String realPath = fileInfoAll.get(k).getPath();
-				long realId = fileInfoAll.get(k).getId();
-				String name = fileInfoAll.get(k).getName();
-				String extension = fileInfoAll.get(k).getExtension();
+			for (int k = 0; k < fileInfos.size(); k++) {
+				String realPath = fileInfos.get(k).getPath();
+				long realId = fileInfos.get(k).getId();
+				String name = fileInfos.get(k).getName();
+				String extension = fileInfos.get(k).getExtension();
 
-				if (fileInfoStrId == structureId) {
-					String sourcePath = realPath + "/" + realId + "_" + name + "." + extension;
-					String destinationPath = dumpCopyPath + folderObj.getTitle() + "/" + path + "/" + name + "." + extension;
-					System.out.println("s : " + sourcePath);
-					System.out.println("d : " + destinationPath);
-					Path source = Paths.get(sourcePath);
-					Path destination = Paths.get(destinationPath);
+				String sourcePath = realPath + "/" + realId + "_" + name + "." + extension;
+				String destinationPath = dumpCopyPath + folderObj.getTitle() + "/" + path + "/" + name + "."
+						+ extension;
+				System.out.println("s : " + sourcePath);
+				System.out.println("d : " + destinationPath);
+				Path source = Paths.get(sourcePath);
+				Path destination = Paths.get(destinationPath);
 
-					try {
-						Files.copy(source, destination);
-					} catch (Exception e) {
-
-					}
+				try {
+					Files.copy(source, destination);
+				} catch (Exception e) {
 
 				}
+
 			}
 
 		}
 	}
 
-	public DownloadObj appendFolderPath(long folderId, List<Structure> structureAll) {
+	public HashMap<String, Object> appendFolderPath(long folderId) {
 
 		List<String> fullPathList = new ArrayList<>();
 		String appendPath = "";
 
 		List<HashMap<Object, Object>> mapList = new ArrayList<HashMap<Object, Object>>();
 		List<Structure> list = new ArrayList<>();
-		Children c = new Children();
-		list = c.getChildrenObj(structureAll, folderId);
-
-		subFolders(list, structureAll, fullPathList, appendPath, mapList);
-
-		return new DownloadObj(mapList, fullPathList);
+		list = structureDAO.findByPid(folderId);
+		
+		subFolders(list, fullPathList, appendPath, mapList);
+		
+		HashMap<String, Object> returnMap = new HashMap<>();
+		returnMap.put("mapList", mapList);
+		returnMap.put("fullPathList", fullPathList);
+		
+		return returnMap;
 	}
 
-	public void subFolders(List<Structure> list, List<Structure> structureAll, List<String> fullPathList,
+	public void subFolders(List<Structure> list, List<String> fullPathList,
 			String appendPath, List<HashMap<Object, Object>> mapList) {
 
 		for (int i = 0; i < list.size(); i++) {
 			long id = list.get(i).getKey();
 
-			Children c = new Children();
-
-			List<Structure> lst = c.getChildrenObj(structureAll, id);
+			List<Structure> lst = structureDAO.findByPid(id);
 
 			// 하위 없음
 			if (lst.size() == 0) {
@@ -340,22 +330,20 @@ public class DownloadObj {
 
 				map.put(list.get(i).getKey(), appendPath);
 				mapList.add(map);
-				subFoldersRecur(lst, structureAll, fullPathList, appendPath, mapList);
+				subFoldersRecur(lst, fullPathList, appendPath, mapList);
 
 				appendPath = "";
 			}
 		}
 	}
 
-	public void subFoldersRecur(List<Structure> list, List<Structure> structureAll, List<String> fullPathList,
+	public void subFoldersRecur(List<Structure> list, List<String> fullPathList,
 			String appendPath, List<HashMap<Object, Object>> mapList) {
 
 		for (int i = 0; i < list.size(); i++) {
 			long id = list.get(i).getKey();
 
-			Children c = new Children();
-
-			List<Structure> lst = c.getChildrenObj(structureAll, id);
+			List<Structure> lst = structureDAO.findByPid(id);
 
 			// 하위 없음
 			if (lst.size() == 0) {
@@ -375,7 +363,7 @@ public class DownloadObj {
 
 				map.put(list.get(i).getKey(), appendPath);
 				mapList.add(map);
-				subFoldersRecur(lst, structureAll, fullPathList, appendPath, mapList);
+				subFoldersRecur(lst, fullPathList, appendPath, mapList);
 
 				String[] split = appendPath.split("/");
 				int splitSize = split.length;
@@ -443,7 +431,9 @@ public class DownloadObj {
 		return file.substring(sourcePath.length() + 1, file.length());
 	}
 	
-	public void downOnlyOneFile(FileInfo fi, HttpServletResponse response) throws IOException {
+	public void downloadOnlyOneFile(long fileId, HttpServletResponse response) throws IOException {
+		FileInfo fi = fileInfoDAO.find(fileId);
+		
 		String id = String.valueOf(fi.getId());
 		String path = fi.getPath();
 		String fileName = fi.getName();
@@ -476,5 +466,116 @@ public class DownloadObj {
         os.flush();
         os.close();
         is.close();
+	}
+	
+	public HashMap<String, Object> downloadMultiple(long parentFolderId, String parentFolderTitle, long[] folderId, long[] fileId, HttpServletResponse response) {
+		Structure folderObj;
+		
+		String folderName = null;
+
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		String authName = auth.getName(); // get logged in username
+
+		String dumpDirPath = null;
+		String zipPath = null;
+		String delDumpTarget = null;
+		
+		HashMap<String, Object> hm = new HashMap<>();
+		// 파일만 선택 시
+		if (fileId != null && folderId == null) {
+			List<FileInfo> fileInfos = fileInfoDAO.partialSelect(parentFolderId);
+			List<FileInfo> downFiles = new ArrayList<>();
+			for (int i = 0; i < fileInfos.size(); i++) {
+				for (int j = 0; j < fileId.length; j++) {
+
+					if (fileInfos.get(i).getId() == fileId[j]) {
+						downFiles.add(fileInfos.get(i));
+					}
+				}
+			}
+			dumpDirPath = upperFilesCopyOnly(authName, downFiles, parentFolderTitle);
+		}
+
+		else {
+			// 폴더 선택 시 또는 파일포함 선택 시
+			for (int i = 0; i < folderId.length; i++) {
+				folderObj = structureDAO.find(folderId[i]);
+				folderName = folderObj.getTitle();
+				
+				hm = appendFolderPath(folderId[i]);
+	
+				dumpDirPath = createDumpDir(((List<String>) hm.get("fullPathList")), authName, folderName, parentFolderTitle);
+
+				// 폴더만 선택 시
+				if ( fileId == null) {
+					fileCopy(((List<HashMap<Object, Object>>) hm.get("mapList")), authName, folderObj, null, parentFolderTitle);
+				}
+				// 폴더, 파일 선택 시
+				else {
+					List<FileInfo> fileInfos = fileInfoDAO.partialSelect(parentFolderId);
+					List<FileInfo> downFiles = new ArrayList<>();
+					for ( int j = 0; j < fileInfos.size(); j++) {
+						for ( int k = 0; k < fileId.length; k++) {
+							if ( fileInfos.get(j).getId() == fileId[k] ) {
+								downFiles.add(fileInfos.get(j));
+							}
+						}
+					}
+					fileCopy(((List<HashMap<Object, Object>>) hm.get("mapList")), authName, folderObj, downFiles, parentFolderTitle);
+				}
+			}
+		}
+		
+		String[] split = dumpDirPath.split("/");
+		int lastSplitSize = split[split.length - 1].length();
+		dumpDirPath = dumpDirPath.substring(0, dumpDirPath.length() - lastSplitSize - 1);
+				
+		zipPath = createZip(dumpDirPath, authName, folderName, response);
+		
+		delDumpTarget = delDumpTarget(dumpDirPath);
+		delDumpDir(delDumpTarget);
+
+		System.out.println("down full path list : " + ((List<String>) hm.get("fullPathList")));
+		System.out.println("map list : " + ((List<HashMap<Object, Object>>) hm.get("mapList")));
+		System.out.println("zip path : " + zipPath);
+		System.out.println("del dump dir path : " + delDumpTarget);
+		HashMap<String, Object> map = new HashMap<>();
+		map.put("zipPath", zipPath);
+		map.put("zipName", parentFolderTitle);
+		
+		return map;
+	}
+	
+	public HashMap<String, Object> downloadOnlyOneFolder(long folderId, HttpServletResponse response) {
+		Structure folderObj = structureDAO.find(folderId);
+		String folderName = folderObj.getTitle();
+		
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+	    String authName = auth.getName(); //get logged in username
+		
+	    HashMap<String, Object> hm = new HashMap<>();
+	    
+	    hm = appendFolderPath(folderId);
+		
+		String dumpDirPath = createDumpDir(((List<String>) hm.get("fullPathList")), authName, folderName, "");
+		
+		fileCopy(((List<HashMap<Object, Object>>) hm.get("mapList")), authName, folderObj, null, "");
+		
+		String zipPath = createZip(dumpDirPath, authName, folderName, response);
+		
+		String delDumpTarget = delDumpTarget(dumpDirPath);
+		
+		delDumpDir(delDumpTarget);
+		
+		System.out.println("down full path list : " + ((List<String>) hm.get("fullPathList")));
+		System.out.println("zip path : " + zipPath);
+		System.out.println("del dump dir path : " + delDumpTarget);
+		
+		HashMap<String, Object> map = new HashMap<>();
+		
+		map.put("zipPath", zipPath);
+		map.put("zipName", folderName);
+		
+		return map;
 	}
 }
