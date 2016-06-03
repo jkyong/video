@@ -1,26 +1,24 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-<script
-	src="${pageContext.request.contextPath}/resources/fancytree/js/treeJs/itemMenu.js"></script>
-<script
-	src="${pageContext.request.contextPath}/resources/fancytree/js/treeJs/fileManager.js"></script>
+<script	src="${pageContext.request.contextPath}/resources/fancytree/js/treeJs/itemMenu.js"></script>
+<script	src="${pageContext.request.contextPath}/resources/fancytree/js/treeJs/fileManager.js"></script>
 <%-- <script
 	src="${pagecontext.request.contextPath }/resources/upload/js/jquery.uploadfile.min.js"></script>
 <link
 	href="${pagecontext.request.contextPath }/resources/upload/css/uploadfile.css"
 	rel="stylesheet">  --%>
-<script
-	src="${pageContext.request.contextPath }/resources/fancytree/js/treeJs/selectFile.js"></script>
+<script	src="${pageContext.request.contextPath }/resources/fancytree/js/treeJs/selectFile.js"></script>
 	
-<script
-	src="${pageContext.request.contextPath }/resources/fancytree/js/treeJs/external.js"></script>
+<script	src="${pageContext.request.contextPath }/resources/fancytree/js/treeJs/external.js"></script>
 	
 <script src="${pageContext.request.contextPath }/resources/bootstrap/js/modal.js"></script>
-<link
-	href="${pagecontext.request.contextPath }/resources/bootstrap/css/bootstrap-theme.min.css"
-	rel="stylesheet">
+<link href="${pagecontext.request.contextPath }/resources/bootstrap/css/bootstrap-theme.min.css" rel="stylesheet">
+
+
 <jsp:include page="../modal/itemMenuModal.jsp"></jsp:include>
+<jsp:include page="../modal/dataTableModal.jsp"></jsp:include>
+
 <script>
 	$(document).ready(function() {
 		$('#moveTree').fancytree({
@@ -148,7 +146,7 @@
 			if ( treeObject.treeData.selectedId != null) {
 				fileManager.uploader();
 				fileManager.uploadedId = treeObject.treeData.selectedId;
-				$('#uploadModal').modal({backdrop: "static"});
+				$('#uploadModal').modal({backdrop: "static", keyboard : false});
 				$('.ajax-file-upload-statusbar').hide();
 			}
 		});
@@ -286,8 +284,8 @@
 		});
 		
 	});
-</script>
-
+</script>    
+    
 
 <form class="navbar-form navbar-right" role="search">
 	<div class="form-group">
@@ -321,7 +319,11 @@
 		</button>
 		
 		<button type="button" class="btn btn-primary testtable">
-			<span class="glyphicon glyphicon-play-circle"></span> table
+			<span class="glyphicon glyphicon-play-circle"></span> external
+		</button>
+		
+		<button type="button" class="btn btn-primary externalList">
+			<span class="glyphicon glyphicon-play-circle"></span> list
 		</button>
 	</div>
 </div>

@@ -6,4 +6,16 @@
 	<bean id = "uploadDefaultPath" class="java.lang.String">
 		<constructor-arg value="C:/zzz/upload"></constructor-arg>
 	</bean>
+	
+	<bean id = "videoUploadDefaultPath" class="java.lang.String">
+		<constructor-arg value="C:/zzz/video/upload"></constructor-arg>
+	</bean>
+	
+	<bean id = "createZipPath" class="java.lang.String">
+		<constructor-arg value="C:/zzz/download"></constructor-arg>
+	</bean>
+	
+	<bean id = "tempFilesPath" class="java.lang.String">
+		<constructor-arg value="C:/zzz/temp_files"></constructor-arg>
+	</bean>
 </beans>

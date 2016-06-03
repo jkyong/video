@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-    
+
 <style>
 .table tbody>tr>th {
 	vertical-align: middle;
@@ -26,10 +26,10 @@
 			</div>
 			<div class="modal-body">
 				<div id="alreadyNameFolder" class="alert alert-danger" style="display: none;">
-  					<strong> folder name already exists. </strong>
+  					<span class="glyphicon glyphicon-warning-sign"></span><strong> folder name already exists. </strong>
 				</div>
 				<div id="whiteSpaceFolder" class="alert alert-danger" style="display: none;">
-  					<strong> please input the folder name. </strong>
+  					<span class="glyphicon glyphicon-warning-sign"></span><strong> please input the folder name. </strong>
 				</div>
 				<form id="newFolderForm">
 					<input type="text" class="form-control newFolderInput" placeholder="input the new folder name.">
@@ -57,10 +57,10 @@
 			</div>
 			<div class="modal-body">
 				<div id="alreadyNameRename" class="alert alert-danger" style="display: none;">
-  					<strong> file name already exists. </strong>
+  					<span class="glyphicon glyphicon-warning-sign"></span><strong>  file name already exists. </strong>
 				</div>
 				<div id="whiteSpaceRename" class="alert alert-danger" style="display: none;">
-  					<strong> please input the file name. </strong>
+  					<span class="glyphicon glyphicon-warning-sign"></span><strong>  please input the file name. </strong>
 				</div>
 				<form id="renameForm">
 					<input type="text" class="form-control renameInput" placeholder="rename the file name.">
@@ -210,3 +210,22 @@
 		</div>
 	</div>
 </div>
+
+<!-- view modal -->
+<div class="modal fade" id="viewModal" tabindex="-1" role="dialog"
+	aria-labelledby="exampleModalLabel" aria-hidden="true">
+	<div class="modal-dialog modal-lg">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal"
+					aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+				<h4 class="modal-title" id="exampleModalLabel">View</h4>
+			</div>
+			<div class="modal-body viewSpace"></div>
+			<div class="modal-footer"></div>
+		</div>
+	</div>
+</div>
+

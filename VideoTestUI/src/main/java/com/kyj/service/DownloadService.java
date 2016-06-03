@@ -16,6 +16,7 @@ import java.util.UUID;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
+import javax.annotation.Resource;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
 
@@ -33,23 +34,25 @@ import com.kyj.persistence.StructureDAO;
 @Service
 public class DownloadService {
 
-	final static String CREATE_ZIP_PATH = "C:/zzz/download";
-
-	final static String TEMP_FILES = "C:/zzz/temp_files";
-	
 	@Autowired
 	private StructureDAO structureDAO;
 	
 	@Autowired
 	private FileInfoDAO fileInfoDAO;
+	
+	@Resource
+	private String createZipPath;
+	
+	@Resource
+	private String tempFilesPath;
 
 	public String createDumpDir(List<String> fullPathList, String authName, String folderName, String parentFolderTitle) {
 		String upperPath = null;
 		
 		if ( parentFolderTitle == "")
-			upperPath = TEMP_FILES + "/" + authName + "/" + folderName;
+			upperPath = tempFilesPath + "/" + authName + "/" + folderName;
 		else
-			upperPath = TEMP_FILES + "/" + authName + "/" + parentFolderTitle + "/" + folderName;
+			upperPath = tempFilesPath + "/" + authName + "/" + parentFolderTitle + "/" + folderName;
 		
 		
 		File upperFolder = new File(upperPath);
@@ -106,10 +109,10 @@ public class DownloadService {
 		
 		UUID uuid = UUID.randomUUID();
 		
-		String createZipPath = CREATE_ZIP_PATH + "/" + authName;
-		String createFullZipPath = createZipPath + "/" + uuid.toString() + ".zip";
+		String createdZipPath = createZipPath + "/" + authName;
+		String createFullZipPath = createdZipPath + "/" + uuid.toString() + ".zip";
 		
-		File createZipFolder = new File(createZipPath);
+		File createZipFolder = new File(createdZipPath);
 		
 		if (!createZipFolder.exists()) {
 			if (createZipFolder.mkdirs()) {
@@ -155,7 +158,7 @@ public class DownloadService {
 	}
 	
 	public String upperFilesCopyOnly( String authName, List<FileInfo> downFiles, String parentFolderTitle) {
-		String upperDumpCopyPath = TEMP_FILES + "/" + authName + "/" + parentFolderTitle;
+		String upperDumpCopyPath = tempFilesPath + "/" + authName + "/" + parentFolderTitle;
 		
 		File upperFolder = new File(upperDumpCopyPath);
 		
@@ -200,9 +203,9 @@ public class DownloadService {
 		String dumpCopyPath = null;
 
 		if (parentFolderTitle == "")
-			dumpCopyPath = TEMP_FILES + "/" + authName + "/";
+			dumpCopyPath = tempFilesPath + "/" + authName + "/";
 		else {
-			dumpCopyPath = TEMP_FILES + "/" + authName + "/" + parentFolderTitle + "/";
+			dumpCopyPath = tempFilesPath + "/" + authName + "/" + parentFolderTitle + "/";
 
 			if (downFiles != null) {
 				for (int i = 0; i < downFiles.size(); i++) {

@@ -1,10 +1,21 @@
 package com.kyj.domain;
 
 import java.io.Serializable;
-
-import javax.persistence.*;
-
+import java.util.ArrayList;
 import java.util.List;
+
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 
 /**
@@ -18,7 +29,7 @@ public class User implements Serializable {
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	private int id;
+	private long id;
 
 	private String email;
 
@@ -29,9 +40,14 @@ public class User implements Serializable {
 	private boolean enabled;
 
 	//bi-directional many-to-many association to Role
-	@ManyToMany
+	@JsonIgnore
+	@ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
 	@JoinTable
 	private List<Role> roles;
+	
+	@JsonIgnore
+	@OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST, CascadeType.REMOVE })
+	private List<ExternalFile> externalFiles = new ArrayList<>();
 
 	public User() {
 	}
@@ -44,11 +60,11 @@ public class User implements Serializable {
 		this.enabled = enabled;
 	}
 	
-	public int getId() {
+	public long getId() {
 		return this.id;
 	}
 
-	public void setId(int id) {
+	public void setId(long id) {
 		this.id = id;
 	}
 
@@ -83,5 +99,15 @@ public class User implements Serializable {
 	public void setRoles(List<Role> roles) {
 		this.roles = roles;
 	}
+
+	public List<ExternalFile> getExternalFiles() {
+		return externalFiles;
+	}
+
+	public void setExternalFiles(List<ExternalFile> externalFiles) {
+		this.externalFiles = externalFiles;
+	}
+	
+	
 
 }

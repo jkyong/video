@@ -41,7 +41,6 @@
 <script	src="http://jqueryvalidation.org/files/dist/jquery.validate.min.js"></script>
 <script	src="http://jqueryvalidation.org/files/dist/additional-methods.min.js"></script>
 
-
 <style type="text/css">
 	body { overflow-x: hidden; padding:15px 25px; }
 </style>
@@ -63,15 +62,12 @@
 				<div class="col-xs-12">
 					<jsp:include page="include/itemMenu.jsp" />
 				</div>
-				<div class="col-xs-12" style="height: 600px;">
+				<div class="col-xs-12 vvcc" style="height: 600px;">
 					<jsp:include page="include/fileList.jsp" />
 				</div>
 			</div>
 
 		</div>
 	</div>
-
-
-
 </body>
 </html>

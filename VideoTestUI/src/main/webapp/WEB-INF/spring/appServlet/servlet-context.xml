@@ -37,9 +37,9 @@
 		</beans:constructor-arg>
 	</beans:bean> -->
 
-	<context:component-scan base-package="com.kyj.controller" />
+	<context:component-scan base-package= "com.kyj.controller" />
 	
-	<beans:import resource="servlet-interceptors.xml"/>
-	
+<!-- 	<beans:import resource="servlet-interceptors.xml"/>
+	 -->
 	
 </beans:beans>

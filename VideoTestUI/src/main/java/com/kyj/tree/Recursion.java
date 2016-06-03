@@ -2,8 +2,8 @@ package com.kyj.tree;
 
 import java.util.List;
 
-import com.kyj.domain.Structure;
 import com.kyj.domain.StructureForTree;
+
 
 public class Recursion {
 	
@@ -67,7 +67,5 @@ public class Recursion {
 		return result;
 		
 	}
-	
-	
-	
 }
+	

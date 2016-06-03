@@ -1,5 +1,5 @@
-<%@ page language="java" contentType="text/html; charset=EUC-KR"
-	pageEncoding="EUC-KR"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
@@ -28,8 +28,12 @@ $(document).ready(function() {
 		<video id="video"
 			class="video-js vjs-default-skin vjs-big-play-centered" controls
 			preload="auto" width="640" height="360"
-			data-setup='{"example_option":true}'> <source
-			src="${pageContext.request.contextPath }/play/video/<c:out value="${uri}"/>/<c:out value="${external}"/>" type='video/mp4'></video>
+			data-setup='{"example_option":true}'> 
+			<source
+			src="${pageContext.request.contextPath }/play/video/<c:out value="${uri}"/>/<c:out value="${external}"/>" type='rtmp/mp4' />
+			<source
+			src="${pageContext.request.contextPath }/play/video/<c:out value="${uri}"/>/<c:out value="${external}"/>" type="application/x-mpegURL" />
+		</video>			
 	</div>
 </body>
 </html>

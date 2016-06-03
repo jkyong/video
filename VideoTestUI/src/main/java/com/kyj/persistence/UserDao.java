@@ -16,8 +16,14 @@ public class UserDao {
 		userRepository.save(user);
 	}
 
-	public User findOne(Integer id) {
+	public User findOne(Long id) {
 		User user = userRepository.findOne(id);
+		
+		return user;
+	}
+	
+	public User findByName(String name) {
+		User user = userRepository.findByName(name);
 		
 		return user;
 	}

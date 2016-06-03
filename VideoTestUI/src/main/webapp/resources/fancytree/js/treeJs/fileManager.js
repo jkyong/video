@@ -594,9 +594,10 @@ var fileManager = {
 									
 									folderName.splice(k, 1);
 									folderId.splice(k, 1);
+
+									alert('already exist folder');
+									break;
 								}
-								else
-									alert('folder not');
 							}
 						}
 					}
@@ -626,9 +627,10 @@ var fileManager = {
 									
 									fileName.splice(k, 1);
 									fileId.splice(k, 1);
+									
+									alert('already exist file');
+									break;
 								}
-								else
-									alert('file not');
 							}
 						}
 					}

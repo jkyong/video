@@ -44,7 +44,7 @@ public class FileInfo {
 	@Length(max = 5)
 	private String extension;
 	
-	@ManyToOne(cascade = CascadeType.PERSIST, optional = false, fetch = FetchType.EAGER)
+	@ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.MERGE }, optional = false, fetch = FetchType.EAGER)
 	@JoinColumn(name = "structure_id", nullable = false)
 	private Structure structure;
 

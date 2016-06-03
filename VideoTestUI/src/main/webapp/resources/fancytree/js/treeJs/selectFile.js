@@ -34,7 +34,22 @@ selectFile = {
 			}
 			else if ( split[0] == "fileId") {
 				//파일이면 실행
-				alert('file');
+				var key = split[1];
+				
+				$.ajax({
+					url : "play/internal/view",
+					data : {
+						id : key
+					},
+					dataType : "html",
+					success : function(data) {
+						$('.viewSpace').html(data);
+						$('#viewModal').modal({backdrop : "static", keyboard: false});
+					},
+					error : function() {
+						alert();
+					},
+				});
 			}
 		});
 		

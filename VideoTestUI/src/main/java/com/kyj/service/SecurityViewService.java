@@ -3,9 +3,9 @@ package com.kyj.service;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.List;
 
-import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -74,10 +74,21 @@ public class SecurityViewService {
 			response.setContentType("video/mp4");
 			InputStream is = new FileInputStream(sb.toString());
 
-			byte[] b = org.apache.commons.io.IOUtils.toByteArray(is);
+			/*byte[] b = org.apache.commons.io.IOUtils.toByteArray(is);
 			ServletOutputStream sos = response.getOutputStream();
 			sos.write(b);
-			sos.flush();
+			sos.flush();*/
+			
+//			ServletOutputStream os = response.getOutputStream();
+			OutputStream os = response.getOutputStream();
+			byte[] buffer = new byte[2048];
+			int len;
+			while ((len = is.read(buffer)) != -1) {
+				os.write(buffer, 0, len);
+			}
+			os.flush();
+			os.close();
+			is.close();
 
 		} catch (IOException e) {
 			
@@ -139,7 +150,7 @@ public class SecurityViewService {
 			return "redirect:/access/denied";
 	}
 	
-	// 초 분 시 일 월 요일 년
+	// 珥� 遺� �떆 �씪 �썡 �슂�씪 �뀈
 	// 0 0 * * * * * ??????????
 	@Scheduled(cron = "0 17 11 * * ?")
 	public void updateExternal() {

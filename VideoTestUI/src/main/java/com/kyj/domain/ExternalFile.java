@@ -2,6 +2,7 @@ package com.kyj.domain;
 
 import java.util.Date;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -30,7 +31,7 @@ public class ExternalFile {
 	@Column(length = 12)
 	private String external;
 	
-	@Length(max = 20)
+	@Length(max = 50)
 	private String memo;
 	
 	@Column(length = 11)
@@ -39,6 +40,10 @@ public class ExternalFile {
 	@ManyToOne(optional = false)
 	@JoinColumn(name = "fileInfo_id")
 	private FileInfo fileInfo;
+	
+	@ManyToOne(fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST, CascadeType.MERGE })
+	@JoinColumn(name = "user_id", nullable = false)
+	private User user;
 
 	public long getId() {
 		return id;
@@ -103,5 +108,15 @@ public class ExternalFile {
 	public void setFileInfo(FileInfo fileInfo) {
 		this.fileInfo = fileInfo;
 	}
+
+	public User getUser() {
+		return user;
+	}
+
+	public void setUser(User user) {
+		this.user = user;
+	}
+	
+	
 
 }

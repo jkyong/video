@@ -71,7 +71,7 @@ body {
 <body>
 	<div class="container">
 
-		<form class="form-signin" role="form" action="/videoui/j_spring_security_check" method="POST">
+		<form class="form-signin" role="form" action="${pageContext.request.contextPath }/j_spring_security_check" method="POST">
 			<h2 class="form-signin-heading">Log in</h2>			
 			<input type="text" id="inputEmail" name='j_username' class="form-control" placeholder="Email address" required autofocus> 
 			<input type="password" id="inputPassword" name='j_password' class="form-control" placeholder="Password" required>

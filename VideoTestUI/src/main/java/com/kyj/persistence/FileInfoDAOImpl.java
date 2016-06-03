@@ -31,19 +31,7 @@ public class FileInfoDAOImpl implements FileInfoDAO {
 		fileInfo.setSize(size);
 		fileInfo.setExtension(extension);
 		fileInfo.setStructure(structure);
-		
-	/*	if ( extension == "mp4") {
-			String externalUuid = UUID.randomUUID().toString();
-			String external = "";
-			String[] split = external.split("-");
-			
-			// 12자리
-			for ( int i =0; i < 2; i++) {
-				external = external + split[i];
-			}
-			fileInfo.setExternal(external);
-		}*/
-		
+
 		em.persist(fileInfo);
 		
 		return fileInfo.getId();
@@ -58,6 +46,7 @@ public class FileInfoDAOImpl implements FileInfoDAO {
 			if ( fileInfo.get(i).getName().equals(files.getName()))
 				fileInfo.remove(i);
 		}
+		
 	}
 	
 	@Transactional

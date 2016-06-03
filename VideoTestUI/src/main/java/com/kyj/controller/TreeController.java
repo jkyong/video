@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.kyj.domain.Structure;
 import com.kyj.domain.StructureForTree;
 import com.kyj.persistence.StructureDAO;
 import com.kyj.tree.Recursion;

@@ -36,7 +36,7 @@ public class Structure {
 	@JsonIgnore
 	@OneToMany(mappedBy = "structure", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<FileInfo> fileInfo = new ArrayList<>();
-
+	
 	public long getKey() {
 		return key;
 	}
@@ -84,5 +84,4 @@ public class Structure {
 	public void setFileInfo(List<FileInfo> fileInfo) {
 		this.fileInfo = fileInfo;
 	}
-	
 }

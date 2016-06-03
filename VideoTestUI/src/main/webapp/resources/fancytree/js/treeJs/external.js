@@ -3,6 +3,7 @@ var external = {
 	save : function(access, startDate, endDate, memo, fileId) {
 		$.ajax({
 			url : "externalSave",
+			async : false,
 			data : {
 				access : external.access,
 				startDate : startDate,
@@ -13,13 +14,13 @@ var external = {
 			success : function(extern) {
 				external.modalResult(extern);
 			},
-			error : function() {
-				
+			error : function(a) {
+				alert(a.status);
 			}
 		});
 	},
 	modalResult : function(extern) {
-		var defaultURI = '112.160.65.103:8889/video';
+		var defaultURI = 'http://112.160.65.107:9909/video';
 		
 		if ( extern.access == 'private') {
 			$('#uriCreate').html(defaultURI + '/guest/' + extern.uri);
