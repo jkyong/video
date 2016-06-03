@@ -19,28 +19,44 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.servlet.view.AbstractView;
 
+import com.kyj.domain.ExternalFile;
 import com.kyj.domain.FileInfo;
+import com.kyj.persistence.ExternalFileDAO;
 import com.kyj.persistence.FileInfoDAO;
 
-@Component("streamView")
+@Component("streamSecurityView")
 @Transactional
-public class InternalViewService extends AbstractView {
+public class StreamSecurityView extends AbstractView {
 	
 	@Autowired
 	private FileInfoDAO fileInfoDAO;
+	
+	@Autowired
+	private ExternalFileDAO externalFile;
 	
 	@Override
 	public void renderMergedOutputModel(Map<String, Object> map,
 			HttpServletRequest request, HttpServletResponse response)
 			throws Exception {
-		long id = (long)map.get("id");
+		ExternalFile exFile = null;
+//		long id = (long)map.get("id");
+		String external = (String) map.get("external");
+		String uri = (String) map.get("uri");
 		
-		FileInfo fileInfo = fileInfoDAO.find(id);
+//		FileInfo fileInfo = fileInfoDAO.find(id);
 		
-		String path = fileInfo.getPath();
-		String key = String.valueOf(fileInfo.getId());
-		String name = fileInfo.getName();
-		String extension = fileInfo.getExtension();
+		if ( external.equals("null"))
+			exFile = externalFile.findByUri(uri);
+		// private
+		else
+			exFile = externalFile.findByExternal(external);
+		
+		FileInfo parentFile = exFile.getFileInfo();
+		
+		String path = parentFile.getPath();
+		String key = String.valueOf(parentFile.getId());
+		String name = parentFile.getName();
+		String extension = parentFile.getExtension();
 		
 		StringBuffer sb = new StringBuffer();		
 		sb.append(path).append("/").append(key).append("_").append(name).append(".").append(extension);

@@ -30,9 +30,7 @@ $(document).ready(function() {
 			preload="auto" width="640" height="360"
 			data-setup='{"example_option":true}'> 
 			<source
-			src="${pageContext.request.contextPath }/play/video/<c:out value="${uri}"/>/<c:out value="${external}"/>" type='rtmp/mp4' />
-			<source
-			src="${pageContext.request.contextPath }/play/video/<c:out value="${uri}"/>/<c:out value="${external}"/>" type="application/x-mpegURL" />
+			src="${pageContext.request.contextPath }/play/video/<c:out value="${uri}"/>/<c:out value="${external}"/>" type='video/mp4' />		
 		</video>			
 	</div>
 </body>

@@ -41,5 +41,7 @@
 	
 <!-- 	<beans:import resource="servlet-interceptors.xml"/>
 	 -->
+	 <beans:bean id="streamView" class="com.kyj.service.InternalViewService" />
+	<beans:bean id="streamSecurityView" class="com.kyj.service.StreamSecurityView" />
 	
 </beans:beans>

@@ -21,7 +21,6 @@
 		class="video-js vjs-default-skin vjs-big-play-centered" controls
 		preload="auto"  height="480"
 		data-setup='{"example_option":true}' style="width: 100%;">
-		<source src="${pageContext.request.contextPath }/play/internal/view/${id}"
-			type='video/mp4'>
+		<source src="${pageContext.request.contextPath }/play/internal/view/${id}" type='video/mp4' />
 	</video>
 </div>

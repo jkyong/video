@@ -1,5 +1,9 @@
 package com.kyj.controller;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
@@ -11,6 +15,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.View;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.kyj.domain.Authority;
@@ -20,6 +26,9 @@ import com.kyj.service.SecurityViewService;
 
 @Controller
 public class SecurityViewController {
+	
+	@Resource(name="streamSecurityView")
+	View streamSecurityView;
 	
 	@Autowired
 	private SecurityViewService service;
@@ -48,7 +57,13 @@ public class SecurityViewController {
 	}
 	
 	@RequestMapping(value = "play/video/{uri}/{external}", method = RequestMethod.GET)
-	public void playVideo(@PathVariable("uri") String uri, @PathVariable("external") String external, HttpServletResponse response) {
-		service.playVideo(uri, external, response);
+	public ModelAndView playVideo(@PathVariable("uri") String uri, @PathVariable("external") String external, HttpServletResponse response) {
+		HashMap<String, String> paraMap = new HashMap<String,String>();
+		paraMap.put("uri", uri);
+		paraMap.put("external", external);
+		ModelAndView mav = new ModelAndView(this.streamSecurityView, paraMap);
+
+		return mav;
+//		service.playVideo(uri, external, response);
 	}
 }
